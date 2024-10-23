@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
+
+    <!-- NAVIGATION BAR -->
     <div class="toolbar">
         <div class="toolbar__center">
         <ul class="nav nav-pills nav-justified">
@@ -22,6 +24,34 @@
         </ul>
         </div>
     </div>
+
+    <!-- SECTION 1 HEADER TEXT -->
+    <h1>Exploratory Data Analysis</h1>
+    <div class="home-p-container">
+        <p>I will start by exploring dataset before showing analysis of the text data</p>
+    </div>
+
+    <!-- SECTION 2 LINE CHART releases and claps over time -->
+    <div class="container">
+        <div class="chart-container">
+            <h3>Articles published vs Claps received over time</h3>
+            <button id="all-line">All Articles</button>
+            <button id="tds-line">Towards Data Science</button>
+            <button id="luc-line">Level Up Coding</button>
+            <button id="tai-line">Towards AI</button>
+            <button id="jr-line">Java Revisited</button>
+            <button id="det-line">Data Engineer Things</button>
+            <canvas id="line-chart" data-url="{{ releases_claps_by_week_url }}"></canvas>
+        </div>
+    </div>
+
+    <!-- SECTION 3.0 -->
+        <!-- SECTION 3.1 BAR+LINE CHART number of articles published vs total claps by day of week -->
+        <!-- SECTION 3.2 BOX CHART claps distribution per publisher-->
+    <!-- SECTION 4.0 -->
+        <!-- SECTION 4.1 DONUT CHART percentage of articles by publishers -->
+        <!-- SECTION 4.2 BAR CHART number of unique authors per publisher -->
+
     <script src="{% static 'js/home.js' %}"></script>
 </body>
 </html>
