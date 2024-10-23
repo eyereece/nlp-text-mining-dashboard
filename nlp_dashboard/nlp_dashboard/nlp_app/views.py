@@ -6,13 +6,16 @@ from .models import Articles
 import pandas as pd
 
 # cache articles data
-cached_articles_data = None
+cached_articles_data = {}
 
 def get_articles_data(publisher=None):
     global cached_articles_data
-    # If the cached data is None, query the database
-    if cached_articles_data is None:
-        # Filter data by publisher
+
+    # Check if the data for the specific publisher is already cached
+    cache_key = publisher or "all"
+    
+    # If the data is not cached, query the database
+    if cache_key not in cached_articles_data:
         if publisher:
             queryset = Articles.objects.filter(collection=publisher).values(
                 "author", "title", "collection", "read_time", "claps", "responses",
@@ -26,9 +29,12 @@ def get_articles_data(publisher=None):
                 "word_count", "title_cleaned", "week", "log_claps", "word_count_title"
             )
         
-        cached_articles_data = pd.DataFrame(list(queryset))
+        # Store the queried data in the cache for the specific publisher
+        cached_articles_data[cache_key] = pd.DataFrame(list(queryset))
     
-    return cached_articles_data
+    # Return the cached data for the given publisher
+    return cached_articles_data[cache_key]
+
 
 def get_releases_claps_by_week(request, publisher=None):
     if request.method == 'GET':
@@ -61,9 +67,7 @@ def get_releases_claps_by_week(request, publisher=None):
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
 
-
-
-# Create your views here.
+# VIEWS
 def home(request):
     releases_claps_by_week_url = '/api/releases-claps-by-week/'
     return render(request, 'home.html', {

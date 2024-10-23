@@ -12,7 +12,7 @@ from nlp_app.views import (
 
 # TESTS
 class GetReleasesClapsByWeekTests(TestCase):
-    @patch('nlp_app.views.get_articles_data')  # Mock the data retrieval function
+    @patch('nlp_app.views.get_articles_data') 
     def test_get_releases_claps_by_week(self, mock_get_articles_data):
         # Sample data to return from the mock function
         mock_data = pd.DataFrame({
@@ -27,7 +27,7 @@ class GetReleasesClapsByWeekTests(TestCase):
         
         # Decode the response content
         json_data = response.content.decode("utf-8")
-        print("JSON RESPONSE: ", json_data)
+        # print("JSON RESPONSE: ", json_data)
         # chart_data = json.loads(json_data)
         # print ("CHART DATA", chart_data)
 
