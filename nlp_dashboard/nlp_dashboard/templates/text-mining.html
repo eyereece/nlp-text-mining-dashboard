@@ -14,14 +14,14 @@
         <div class="toolbar__center">
         <ul class="nav nav-pills nav-justified">
             <li class="nav-item">
-                <a class="nav-link active" href="{% url 'home' %}">Dashboard</a>
+                <a class="nav-link" href="{% url 'home' %}">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class ="nav-link" href="{% url 'text-mining' %}">Text Mining</a>
+                <a class ="nav-link active" href="{% url 'text-mining' %}">Text Mining</a>
             </li>
         </ul>
         </div>
     </div>
-    <script src="{% static 'js/home.js' %}"></script>
+    <script src="{% static 'js/textMining.js' %}"></script>
 </body>
 </html>

@@ -8,3 +8,6 @@ def home(request):
     return render(request, 'home.html', {
         'articles': articles
     })
+
+def text_mining(request):
+    return render(request, 'text-mining.html') 
