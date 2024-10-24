@@ -180,6 +180,27 @@ def get_claps_distribution(request, publisher=None):
 
 
 # Percentages of articles by publisher (count number of articles per each publisher)
+def get_publisher_count(request, publisher=None):
+    """
+    Processes article data to count the number of articles per collection for a specified publisher.
+
+    Expected result: A JSON object, e.g.,
+    {
+        "Publisher A": 5,
+        "Publisher B": 2,
+        "Publisher C": 1,
+        "Publisher D": 1
+    }
+    """
+    if request.method == 'GET':
+        df = get_articles_data(publisher)
+
+        # Count Collection
+        pub_count = df['collection'].value_counts()
+        result = pub_count.to_dict()
+        return JsonResponse(result, safe=False)
+    else:
+        return JsonResponse({"error": "Method not allowed"}, status=405)
 
 # Number of unique authors per publisher
 
@@ -188,10 +209,12 @@ def home(request):
     releases_claps_by_week_url = '/api/releases-claps-by-week/'
     releases_claps_by_day_url = '/api/releases-claps-by-day/'
     claps_distribution_url = '/api/claps-distribution/'
+    publisher_count_url = '/api/publisher-count/'
     return render(request, 'home.html', {
         'releases_claps_by_week_url': releases_claps_by_week_url,
         'releases_claps_by_day_url': releases_claps_by_day_url,
         'claps_distribution_url': claps_distribution_url,
+        'publisher_count_url': publisher_count_url,
     })
 
 def text_mining(request):

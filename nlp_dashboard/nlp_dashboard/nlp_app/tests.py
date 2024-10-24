@@ -11,6 +11,7 @@ from nlp_app.views import (
     get_releases_claps_by_week,
     get_releases_claps_by_day,
     get_claps_distribution,
+    get_publisher_count,
 )
 
 # TESTS
@@ -121,7 +122,6 @@ class ClapsDistributionTest(TestCase):
 
         # Load the response content
         data = json.loads(response.content.decode("utf-8"))
-        print("Claps Distribution: ", data)
 
         # Check the structure of the returned data
         self.assertIsInstance(data, list)  # Expecting a list of results
@@ -129,6 +129,47 @@ class ClapsDistributionTest(TestCase):
 
 
 # articles count per publisher
+class PublisherCountTest(TestCase):
+    @patch('nlp_app.views.get_articles_data')
+    def test_get_publisher_count(self, mock_get_articles_data):
+        mock_data = pd.DataFrame([
+            {"collection": "Towards Data Science"},
+            {"collection": "Towards Data Science"},
+            {"collection": "Towards AI"},
+            {"collection": "Level Up Coding"},
+        ])
+        mock_get_articles_data.return_value = mock_data
+
+        # Simulate a GET request
+        response = self.client.get(reverse('publisher-count'))
+
+        # Decode the response content
+        json_data = response.content.decode('utf-8')
+
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/json")
+
+        # Load the response content
+        data = json.loads(response.content.decode("utf-8"))
+
+        # Check the structure of the returned data
+        self.assertIsInstance(data, dict)  # Expecting a dictionary as result
+        self.assertEqual(len(data), 3)  # 3 unique collections
+
+        # Validate the counts for each collection
+        expected_counts = {
+            "Towards Data Science": 2,
+            "Towards AI": 1,
+            "Level Up Coding": 1,
+        }
+
+        for collection, count in expected_counts.items():
+            self.assertIn(collection, data)  # Ensure each collection is returned
+            self.assertEqual(data[collection], count)  # Check the count matches
+
+
+
 
 # unique authors count per publisher
 

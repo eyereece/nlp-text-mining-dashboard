@@ -5,6 +5,7 @@ from .views import (
     get_releases_claps_by_week,
     get_releases_claps_by_day,
     get_claps_distribution,
+    get_publisher_count,
     )
 
 urlpatterns = [
@@ -39,6 +40,7 @@ urlpatterns = [
     path('api/claps-distribution/', get_claps_distribution, name='claps-distribution'),
 
     # donut chart: articles count per publisher
+    path('api/publisher-count/', get_publisher_count, name='publisher-count'),
 
     # bar chart: unique authors count per publisher
 
