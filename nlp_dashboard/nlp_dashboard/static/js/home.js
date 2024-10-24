@@ -306,7 +306,44 @@ fetch(clapsDistUrl)
 
 // SECTION 4.0
 // SECTION 4.1 DONUT CHART: number of articles published per publisher
+const pubCountUrl = document.getElementById('donut-chart').dataset.url;
 
+fetch(pubCountUrl)
+    .then(response => response.json())
+    .then(data => {
+        const labels = Object.keys(data);
+        const pubCountData = Object.values(data);
+
+    const dataDonut = {
+        labels: labels,
+        datasets: [{
+            data: pubCountData,
+            backgroundColor: Object.values(Utils.CHART_COLORS)
+        }]
+    };
+
+    const configDonut = {
+        type: 'doughnut',
+        data: dataDonut,
+        options: {
+            responsive: true,
+            aspectRatio: 2.0,
+            cutout: '70%',
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'left'
+                }
+            }
+        }
+    };
+
+    const ctxDonut = document.getElementById('donut-chart').getContext('2d');
+    new Chart(ctxDonut, configDonut);
+    })
+    .catch(error => {
+        console.error('Error fetching publisher count data:', error);
+    });
 // END SECTION 4.1
 
 // SECTION 4.2 BAR CHART: number of unique authors per publisher

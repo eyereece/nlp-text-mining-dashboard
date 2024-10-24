@@ -65,8 +65,14 @@
          </div>
     </div>
     <!-- SECTION 4.0 -->
+    <div class="container">
         <!-- SECTION 4.1 DONUT CHART percentage of articles by publishers -->
+        <div class="chart-container">
+            <h3>Number of Articles Released</h3>
+            <canvas id="donut-chart" data-url="{{ publisher_count_url }}"></canvas>
+        </div>
         <!-- SECTION 4.2 BAR CHART number of unique authors per publisher -->
+    </div>
 
     <script src="{% static 'js/home.js' %}"></script>
 </body>
