@@ -109,3 +109,146 @@ document.getElementById('det-line').addEventListener('click', () => fetchChartDa
 fetchChartData();
 
 // END SECTION 2 - LINE CHART
+
+// SECTION 3.0
+// SECTION 3.1 BAR+LINE CHART: average articles published vs claps by day
+(function() {
+    function fetchData(publisher = '') {
+        const apiUrl = document.getElementById("bar-line-chart").getAttribute("data-url");
+        const url = publisher ? `${apiUrl}${publisher}/` : apiUrl;
+
+        return fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .catch(error => console.error("Error fetching data:", error));
+    }
+
+    function renderChart(data, publisher) {
+        const ctx = document.getElementById('bar-line-chart').getContext('2d');
+        const gradientBarLine = ctx.createLinearGradient(0, 0, 0, 400);
+        gradientBarLine.addColorStop(0, 'rgba(30, 144, 255, 0.7)');
+        gradientBarLine.addColorStop(1, 'rgba(30, 144, 255, 0)');
+        
+        // Define the order of days
+        const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+        // Sort the data based on the day order
+        data.sort((a, b) => dayOrder.indexOf(a.pub_day) - dayOrder.indexOf(b.pub_day));
+
+        // Clear any existing chart first
+        if (window.myChart) {
+            window.myChart.destroy();
+        }
+
+        let useCurves = true;
+
+        const dataBarLine = {
+            labels: data.map(item => item.pub_day),
+                datasets: [{
+                    label: 'Avg Articles Published',
+                    data: data.map(item => item.avg_articles_published),
+                    backgroundColor: gradientBarLine,
+                    borderColor: 'rgba(30, 144, 255, 1)',
+                    borderWidth: 1,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Avg Claps',
+                    data: data.map(item => item.avg_claps_per_day),
+                    borderColor: 'rgba(75, 192, 192, 0.8)',
+                    borderWidth: 1,
+                    tension: useCurves ? 0.4 : 0,
+                    type: 'line',
+                    yAxisID: 'y1',
+                }]
+        };
+
+        // Set Title for selected publisher or all articles
+        const barLineTitle = publisher
+            ? `${publisher}`
+            : 'All Articles';
+
+        const configBarLine = {
+            type: 'bar',
+            data: dataBarLine,
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                stacked: false,
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: {
+                            drawOnChartArea: false,
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: barLineTitle
+                    }
+                }
+            }
+        }
+        
+        // Create a new chart
+        window.myChart = new Chart(ctx, configBarLine);
+    }
+
+    // Button click event listeners
+    document.getElementById("all-bar-line").addEventListener("click", () => {
+        fetchData().then(data => renderChart(data, 'All Articles'));
+    });
+    document.getElementById("tds-bar-line").addEventListener("click", () => {
+        fetchData("Towards Data Science").then(data => renderChart(data, 'Towards Data Science'));
+    });
+    document.getElementById("luc-bar-line").addEventListener("click", () => {
+        fetchData("Level Up Coding").then(data => renderChart(data, 'Level Up Coding'));
+    });
+    document.getElementById("tai-bar-line").addEventListener("click", () => {
+        fetchData("Towards AI").then(data => renderChart(data, 'Towards AI'));
+    });
+    document.getElementById("jr-bar-line").addEventListener("click", () => {
+        fetchData("Javarevisited").then(data => renderChart(data, 'Javarevisited'));
+    });
+    document.getElementById("det-bar-line").addEventListener("click", () => {
+        fetchData("Data Engineer Things").then(data => renderChart(data, 'Data Engineer Things'));
+    });
+
+    // Optionally load default data
+    fetchData().then(data => renderChart(data, 'All Articles'));
+})();
+
+// END SECTION 3.1
+
+// SECTION 3.2 BOX CHART: claps distribution
+
+// END SECTION 3.2
+
+// SECTION 4.0
+// SECTION 4.1 DONUT CHART: number of articles published per publisher
+
+// END SECTION 4.1
+
+// SECTION 4.2 BAR CHART: number of unique authors per publisher
+
+// END SECTION 4.2
+
