@@ -6,6 +6,7 @@ from .views import (
     get_releases_claps_by_day,
     get_claps_distribution,
     get_publisher_count,
+    get_nunique_authors,
     )
 
 urlpatterns = [
@@ -43,6 +44,7 @@ urlpatterns = [
     path('api/publisher-count/', get_publisher_count, name='publisher-count'),
 
     # bar chart: unique authors count per publisher
+    path('api/nunique-authors/', get_nunique_authors, name='nunique-authors'),
 
     # APIs - text mining
 ]

@@ -12,6 +12,7 @@ from nlp_app.views import (
     get_releases_claps_by_day,
     get_claps_distribution,
     get_publisher_count,
+    get_nunique_authors, 
 )
 
 # TESTS
@@ -169,9 +170,46 @@ class PublisherCountTest(TestCase):
             self.assertEqual(data[collection], count)  # Check the count matches
 
 
-
-
 # unique authors count per publisher
+class NuniqueAuthorsTest(TestCase):
+    @patch('nlp_app.views.get_articles_data')
+    def test_get_nunique_authors(self, mock_get_articles_data):
+        mock_data = pd.DataFrame([
+            {"collection": "Towards Data Science", "author": "Author 1"},
+            {"collection": "Towards Data Science", "author": "Author 2"},
+            {"collection": "Towards AI", "author": "Author 1"},
+            {"collection": "Level Up Coding", "author": "Author 3"},
+            {"collection": "Level Up Coding", "author": "Author 1"},
+        ])
+        mock_get_articles_data.return_value = mock_data
+
+        # Simulate a GET request
+        response = self.client.get(reverse('publisher-count'))
+
+        # Decode the response content
+        json_data = response.content.decode('utf-8')
+
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/json")
+
+        # Load the response content
+        data = json.loads(response.content.decode("utf-8"))
+
+        # Check the structure of the returned data
+        self.assertIsInstance(data, dict)  # Expecting a dictionary as result
+        self.assertEqual(len(data), 3)  # 3 unique collections
+
+        # Validate the counts for each collection
+        expected_counts = {
+            "Towards Data Science": 2,  # 2 unique authors
+            "Towards AI": 1,  # 1 unique author
+            "Level Up Coding": 2,  # 2 unique authors
+        }
+
+        for collection, count in expected_counts.items():
+            self.assertIn(collection, data)  # Ensure each collection is returned
+            self.assertEqual(data[collection], count)  # Check the count matches
 
 # API 2 - TEXT MINING
 

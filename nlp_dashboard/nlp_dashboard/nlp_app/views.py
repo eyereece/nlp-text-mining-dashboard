@@ -31,6 +31,8 @@ def get_articles_data(publisher=None):
         
         # Store the queried data in the cache for the specific publisher
         cached_articles_data[cache_key] = pd.DataFrame(list(queryset))
+
+    print(f"Execution time: {execution_time:.4f} seconds")  # Print execution time
     
     # Return the cached data for the given publisher
     return cached_articles_data[cache_key]
@@ -128,6 +130,7 @@ def get_outliers(series):
     # Return the values in the series that are outside the lower and upper bounds
     return series[(series < lower_bound) | (series > upper_bound)]
 
+
 def get_claps_distribution(request, publisher=None):
     """
     Processes article data to calculate the distribution of log claps for each collection.
@@ -203,6 +206,18 @@ def get_publisher_count(request, publisher=None):
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
 # Number of unique authors per publisher
+def get_nunique_authors(request, publisher=None):
+    if request.method == 'GET':
+        df = get_articles_data(publisher)
+        df = df[['collection', 'author']]
+
+        # Count number of unique authors
+        nunique_authors = df.groupby('collection')['author'].nunique()
+        result = nunique_authors.to_dict()
+        return JsonResponse(result, safe=False)
+    else:
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+
 
 # VIEWS
 def home(request):
@@ -210,11 +225,13 @@ def home(request):
     releases_claps_by_day_url = '/api/releases-claps-by-day/'
     claps_distribution_url = '/api/claps-distribution/'
     publisher_count_url = '/api/publisher-count/'
+    nunique_authors_url = '/api/nunique_authors/'
     return render(request, 'home.html', {
         'releases_claps_by_week_url': releases_claps_by_week_url,
         'releases_claps_by_day_url': releases_claps_by_day_url,
         'claps_distribution_url': claps_distribution_url,
         'publisher_count_url': publisher_count_url,
+        'nunique_authors_url': nunique_authors_url,
     })
 
 def text_mining(request):
