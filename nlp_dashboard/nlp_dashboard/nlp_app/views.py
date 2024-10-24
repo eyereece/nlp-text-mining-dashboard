@@ -35,8 +35,16 @@ def get_articles_data(publisher=None):
     # Return the cached data for the given publisher
     return cached_articles_data[cache_key]
 
-
+# releases vs claps result grouped by week
 def get_releases_claps_by_week(request, publisher=None):
+    """
+    Processes article data to calculate weekly releases and claps for a specified publisher.
+    Expected result: A JSON array, e.g.,
+    [
+        {"published_date": "2024-01-07", "releases": 5, "claps": 100},
+        {"published_date": "2024-01-14", "releases": 3, "claps": 50}
+    ]
+    """
     if request.method == 'GET':
         df = get_articles_data(publisher)
 
@@ -66,12 +74,51 @@ def get_releases_claps_by_week(request, publisher=None):
     else:
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
+# Releases vs claps by day of week
+def get_releases_claps_by_day(request, publisher=None):
+    """
+    Calculates the average number of articles published and average claps per day for a given publisher.
+    Expected result: A JSON array, e.g.,
+    [
+        {"pub_day": "Monday", "avg_articles_published": 1.5, "avg_claps_per_day": 75.0},
+        {"pub_day": "Tuesday", "avg_articles_published": 2.0, "avg_claps_per_day": 60.0}
+    ]
+    """
+    if request.method == 'GET':
+        df = get_articles_data(publisher)
+
+        # Count unique weeks
+        unique_weeks = df['week'].nunique()
+
+        # Group by 'pub_day' and calculate both average articles and claps per day
+        grouped = df.groupby('pub_day').agg(
+            avg_articles_published=('title', 'size'), avg_claps_per_day=('claps', 'mean')
+        )
+
+        # Divide articles count by unique weeks to get the average
+        grouped['avg_articles_published'] = grouped['avg_articles_published'] / unique_weeks
+
+        # Convert the result to JSON and return response
+        result = grouped.reset_index().to_dict(orient='records')
+        return JsonResponse(result, safe=False)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+# Claps distribution of each publisher
+# helper function to find outlier
+
+# Percentages of articles by publisher (count number of articles per each publisher)
+
+# Number of unique authors per publisher
 
 # VIEWS
 def home(request):
     releases_claps_by_week_url = '/api/releases-claps-by-week/'
+    releases_claps_by_day_url = '/api/releases-claps-by-day/'
     return render(request, 'home.html', {
         'releases_claps_by_week_url': releases_claps_by_week_url,
+        'releases_claps_by_day_url': releases_claps_by_day_url,
     })
 
 def text_mining(request):

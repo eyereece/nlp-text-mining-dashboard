@@ -10,7 +10,7 @@ const Utils = {
       }
 };
 
-// SECTION 1 - LINE - releases and claps by week NEW
+// SECTION 2 - LINE - releases and claps by week NEW
 const baseReleasesClapsByWeekUrl = document.getElementById('line-chart').dataset.url;
 
 function fetchChartData(publisher = '') {
@@ -108,4 +108,4 @@ document.getElementById('det-line').addEventListener('click', () => fetchChartDa
 // Initially load data for all articles
 fetchChartData();
 
-// END SECTION 1 - LINE CHART
+// END SECTION 2 - LINE CHART

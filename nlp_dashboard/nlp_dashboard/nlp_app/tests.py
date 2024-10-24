@@ -8,9 +8,11 @@ import pandas as pd
 from nlp_app.views import (
     get_articles_data,
     get_releases_claps_by_week,
+    get_releases_claps_by_day,
 )
 
 # TESTS
+# releases vs claps by week
 class GetReleasesClapsByWeekTests(TestCase):
     @patch('nlp_app.views.get_articles_data') 
     def test_get_releases_claps_by_week(self, mock_get_articles_data):
@@ -27,9 +29,6 @@ class GetReleasesClapsByWeekTests(TestCase):
         
         # Decode the response content
         json_data = response.content.decode("utf-8")
-        # print("JSON RESPONSE: ", json_data)
-        # chart_data = json.loads(json_data)
-        # print ("CHART DATA", chart_data)
 
         # Check that the response status code is 200 (OK)
         self.assertEqual(response.status_code, 200)
@@ -48,4 +47,58 @@ class GetReleasesClapsByWeekTests(TestCase):
         # Check that the response status code is 405 (Method Not Allowed)
         self.assertEqual(response.status_code, 405)
         self.assertJSONEqual(response.content, {"error": "Method not allowed"})
+
+
+# releases vs claps by day of week
+class GetReleasesClapsByDayTests(TestCase):
+    @patch('nlp_app.views.get_articles_data')
+    def test_get_releases_claps_by_day(self, mock_get_articles_data):
+        # Sample data to return from the mock function
+        mock_data = pd.DataFrame([{
+            'pub_day': 'Wednesday',
+            'title': 'Normalization vs Denormalization',
+            'claps': 623,
+            'collection': 'Data Engineer Things',
+            'week': 1,
+        },
+        {
+            'pub_day': 'Wednesday',
+            'title': 'Conquering real-time data',
+            'claps': 157,
+            'collection': 'Data Engineer Things',
+            'week': 1,
+        },
+        {
+            'pub_day': 'Tuesday',
+            'title': 'Cassandra Data Generation',
+            'claps': 17,
+            'collection': 'Data Engineer Things',
+            'week': 2,
+        }
+        ])
+        mock_get_articles_data.return_value = mock_data
+
+        # Simulate a GET request
+        response = self.client.get(reverse('releases-claps-by-day'))
+
+        # Decode the response content
+        json_data = response.content.decode('utf-8')
+
+        # Check that the response status code is 200 (OK)
+        self.assertEqual(response.status_code, 200)
+
+        # Check the structure of the response data
+        expected_response = [
+            {"pub_day": "Tuesday", "avg_articles_published": 0.5, "avg_claps_per_day": 17.0},
+            {"pub_day": "Wednesday", "avg_articles_published": 1.0, "avg_claps_per_day": 390.0},
+        ]
+        self.assertJSONEqual(json_data, expected_response)
+
+# claps distribution
+
+# articles count per publisher
+
+# unique authors count per publisher
+
+# API 2 - TEXT MINING
 
