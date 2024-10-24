@@ -3,7 +3,9 @@ from .views import (
     home,
     text_mining,
     get_releases_claps_by_week,
-    get_releases_claps_by_day,)
+    get_releases_claps_by_day,
+    get_claps_distribution,
+    )
 
 urlpatterns = [
     # PAGES
@@ -34,6 +36,7 @@ urlpatterns = [
     ),
 
     # box chart: claps distribution
+    path('api/claps-distribution/', get_claps_distribution, name='claps-distribution'),
 
     # donut chart: articles count per publisher
 

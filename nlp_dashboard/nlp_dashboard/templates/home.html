@@ -46,6 +46,7 @@
     </div>
 
     <!-- SECTION 3.0 -->
+     <div class="container">
         <!-- SECTION 3.1 BAR+LINE CHART number of articles published vs total claps by day of week -->
         <div class="chart-container">
             <h3>Average Articles Published vs Claps by day of week</h3>
@@ -58,6 +59,11 @@
             <canvas id="bar-line-chart" data-url="{{ releases_claps_by_day_url }}"></canvas>
             </div>
         <!-- SECTION 3.2 BOX CHART claps distribution per publisher-->
+         <div class="chart-container">
+            <h3>Claps Distribution</h3>
+            <canvas id="box-chart" data-url="{{ claps_distribution_url }}"></canvas>
+         </div>
+    </div>
     <!-- SECTION 4.0 -->
         <!-- SECTION 4.1 DONUT CHART percentage of articles by publishers -->
         <!-- SECTION 4.2 BAR CHART number of unique authors per publisher -->

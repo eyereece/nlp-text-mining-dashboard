@@ -106,7 +106,78 @@ def get_releases_claps_by_day(request, publisher=None):
 
 
 # Claps distribution of each publisher
-# helper function to find outlier
+def get_outliers(series):
+    """
+    Helper function to find the outliers
+    """
+    # Calculate the first quartile (Q1) of the data
+    q1 = series.quantile(0.25)
+    
+    # Calculate the third quartile (Q3) of the data
+    q3 = series.quantile(0.75)
+    
+    # Compute the Interquartile Range (IQR)
+    iqr = q3 - q1
+    
+    # Determine the lower bound for outliers
+    lower_bound = q1 - 1.5 * iqr
+    
+    # Determine the upper bound for outliers
+    upper_bound = q3 + 1.5 * iqr
+    
+    # Return the values in the series that are outside the lower and upper bounds
+    return series[(series < lower_bound) | (series > upper_bound)]
+
+def get_claps_distribution(request, publisher=None):
+    """
+    Processes article data to calculate the distribution of log claps for each collection.
+    Expected result: A JSON array, e.g.,
+    [
+        {
+            "label": "Collection A",
+            "min": 1,
+            "q1": 5,
+            "median": 10,
+            "q3": 15,
+            "max": 20,
+            "outliers": [25, 30]
+        },
+        {
+            "label": "Collection B",
+            "min": 2,
+            "q1": 4,
+            "median": 8,
+            "q3": 12,
+            "max": 16,
+            "outliers": []
+        }
+    ]
+    """
+    if request.method == 'GET':
+        df = get_articles_data(publisher)
+        df = df[['collection', 'log_claps']]
+        grouped = df.groupby('collection')
+        result = []
+        if df.empty:
+            return  JsonResponse(result, safe=False)
+        for collection, group in grouped:
+            stats = group['log_claps'].describe(percentiles=[0.25, 0.5, 0.75])
+            outliers = get_outliers(group['log_claps'])
+            result.append(
+            {
+                "label": collection,
+                "min": stats["min"],
+                "q1": stats["25%"],
+                "median": stats["50%"],
+                "q3": stats["75%"],
+                "max": stats["max"],
+                "outliers": outliers.tolist(),
+            }
+        )
+        return JsonResponse(result, safe=False)
+    else:
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+
 
 # Percentages of articles by publisher (count number of articles per each publisher)
 
@@ -116,9 +187,11 @@ def get_releases_claps_by_day(request, publisher=None):
 def home(request):
     releases_claps_by_week_url = '/api/releases-claps-by-week/'
     releases_claps_by_day_url = '/api/releases-claps-by-day/'
+    claps_distribution_url = '/api/claps-distribution/'
     return render(request, 'home.html', {
         'releases_claps_by_week_url': releases_claps_by_week_url,
         'releases_claps_by_day_url': releases_claps_by_day_url,
+        'claps_distribution_url': claps_distribution_url,
     })
 
 def text_mining(request):

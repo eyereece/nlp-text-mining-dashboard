@@ -3,12 +3,14 @@ from django.urls import reverse
 from django.http import JsonResponse
 from unittest.mock import patch, MagicMock
 
+import json
 import pandas as pd
 
 from nlp_app.views import (
     get_articles_data,
     get_releases_claps_by_week,
     get_releases_claps_by_day,
+    get_claps_distribution,
 )
 
 # TESTS
@@ -95,6 +97,36 @@ class GetReleasesClapsByDayTests(TestCase):
         self.assertJSONEqual(json_data, expected_response)
 
 # claps distribution
+class ClapsDistributionTest(TestCase):
+    @patch('nlp_app.views.get_articles_data')
+    def test_get_claps_distribution(self, mock_get_articles_data):
+        # Mock data representing the actual structure with 'collection' and 'log_claps'
+        mock_data = pd.DataFrame([
+            {"collection": 'Towards Data Science', 'log_claps': 10},
+            {"collection": "Towards Data Science", "log_claps": 20},
+            {"collection": "TowardsAI", "log_claps": 30},
+            {"collection": "TowardsAI", "log_claps": 40},
+            {"collection": "Javarevisited", "log_claps": 50},
+            {"collection": "Data Engineer Things", "log_claps": 60},
+        ])
+        # Mock the return value
+        mock_get_articles_data.return_value = mock_data
+
+        # Simulate a GET request
+        response = self.client.get(reverse('claps-distribution'))
+
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/json")
+
+        # Load the response content
+        data = json.loads(response.content.decode("utf-8"))
+        print("Claps Distribution: ", data)
+
+        # Check the structure of the returned data
+        self.assertIsInstance(data, list)  # Expecting a list of results
+        self.assertEqual(len(data), 4)  # 4 unique collections
+
 
 # articles count per publisher
 

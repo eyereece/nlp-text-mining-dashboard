@@ -240,6 +240,67 @@ fetchChartData();
 // END SECTION 3.1
 
 // SECTION 3.2 BOX CHART: claps distribution
+const clapsDistUrl = document.getElementById('box-chart').dataset.url;
+
+fetch(clapsDistUrl)
+    .then(response => response.json())
+    .then(data => {
+        const labels = data.map(item => item.label);
+        const clapsData = data.map(item => ({
+            min: item.min,
+            q1: item.q1,
+            median: item.median,
+            q3: item.q3,
+            max: item.max,
+            outliers: item.outliers
+        }));
+
+        // Create Chart
+        const ctxBox = document.getElementById('box-chart').getContext('2d');
+        const gradientBox = ctxBox.createLinearGradient(0, 0, 0, 400);
+        gradientBox.addColorStop(0, 'rgba(30, 144, 255, 0.7)');
+        gradientBox.addColorStop(1, 'rgba(30, 144, 255, 0)');
+
+        // Create box plot data object
+        const boxData = {
+            labels: labels,
+            datasets: [{
+                label: 'Claps Distribution of Publishers',
+                backgroundColor: gradientBox,
+                borderColor: 'rgba(30, 144, 255, 1)',
+                borderWidth: 1,
+                outlierRadius: 3,
+                itemRadius: 3,
+                outlierBackgroundColor: 'rgba(30, 144, 255, 0.3)',
+                padding: 10,
+                data: clapsData
+            }]
+        };
+
+        const configBox = {
+            type: 'boxplot',
+            data: boxData,
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                elements: {
+                    boxAndWhiskers: {
+                        itemRadius: 2,
+                        itemHitRadius: 4
+                    }
+                },
+                title: {
+                    display: false,
+                    text: 'Box Plot'
+                }
+            }
+        }
+
+        new Chart(ctxBox, configBox);
+    })
+    .catch(error => console.log('Error fetching claps distribution: ', error));
 
 // END SECTION 3.2
 
