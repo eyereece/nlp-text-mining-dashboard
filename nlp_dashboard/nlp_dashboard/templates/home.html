@@ -72,6 +72,10 @@
             <canvas id="donut-chart" data-url="{{ publisher_count_url }}"></canvas>
         </div>
         <!-- SECTION 4.2 BAR CHART number of unique authors per publisher -->
+        <div class="chart-container">
+            <h3>Number of Unique Authors per Publisher</h3>
+            <canvas id="bar-chart" data-url="{{ nunique_authors_url }}"></canvas>
+        </div>
     </div>
 
     <script src="{% static 'js/home.js' %}"></script>

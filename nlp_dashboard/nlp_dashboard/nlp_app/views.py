@@ -31,9 +31,6 @@ def get_articles_data(publisher=None):
         
         # Store the queried data in the cache for the specific publisher
         cached_articles_data[cache_key] = pd.DataFrame(list(queryset))
-
-    print(f"Execution time: {execution_time:.4f} seconds")  # Print execution time
-    
     # Return the cached data for the given publisher
     return cached_articles_data[cache_key]
 
@@ -225,7 +222,7 @@ def home(request):
     releases_claps_by_day_url = '/api/releases-claps-by-day/'
     claps_distribution_url = '/api/claps-distribution/'
     publisher_count_url = '/api/publisher-count/'
-    nunique_authors_url = '/api/nunique_authors/'
+    nunique_authors_url = '/api/nunique-authors/'
     return render(request, 'home.html', {
         'releases_claps_by_week_url': releases_claps_by_week_url,
         'releases_claps_by_day_url': releases_claps_by_day_url,

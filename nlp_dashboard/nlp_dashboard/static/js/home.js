@@ -347,6 +347,49 @@ fetch(pubCountUrl)
 // END SECTION 4.1
 
 // SECTION 4.2 BAR CHART: number of unique authors per publisher
+const nuniqueAuthoursUrl = document.getElementById('bar-chart').dataset.url;
+
+fetch(nuniqueAuthoursUrl)
+    .then(response => response.json())
+    .then(data => {
+        // label-data is a key-value pair
+        const labels = Object.keys(data);
+        const authorsData = Object.values(data);
+    
+    const ctxBar = document.getElementById('bar-chart').getContext('2d');
+    const gradientBar = ctxBar.createLinearGradient(0, 0, 0, 400);
+    gradientBar.addColorStop(0, 'rgba(30, 144, 255, 0.7)');
+    gradientBar.addColorStop(1, 'rgba(30, 144, 255, 0)'); 
+
+    const dataBar = {
+        labels: labels,
+        datasets: [{
+            label: 'all articles',
+            data: authorsData,
+            backgroundColor: gradientBar,
+            borderColor: 'rgba(30, 144, 255, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    const configBar = {
+        type: 'bar',
+        data: dataBar,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top'
+                }
+            }
+        }
+    };
+
+    new Chart (ctxBar, configBar);
+    })
+    .catch(error => {
+        console.error('Error fetching unique authors data:', error);
+    });
 
 // END SECTION 4.2
 
