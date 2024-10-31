@@ -3,11 +3,13 @@ from django.urls import reverse
 from django.http import JsonResponse
 from unittest.mock import patch, MagicMock
 
+import unittest
 import json
 import pandas as pd
 
 from nlp_app.views import (
     get_articles_data,
+    cached_articles_data,
     get_releases_claps_by_week,
     get_releases_claps_by_day,
     get_claps_distribution,
@@ -16,6 +18,38 @@ from nlp_app.views import (
 )
 
 # TESTS
+
+# cache
+class GetArticlesDataCacheTest(TestCase):
+
+    def setUp(self):
+        cached_articles_data.clear()  # Clear cache before each test
+
+    @patch('nlp_app.views.Articles.objects')  # Mock the query
+    def test_cache_miss_and_hit(self, mock_articles):
+        # Mock the queryset to return a fixed list
+        mock_articles.all.return_value.values.return_value = [
+            {
+                "author": "Author A", "title": "Title A", "collection": "Collection A",
+                "read_time": 5, "claps": 100, "responses": 10, "published_date": "2024-01-01",
+                "pub_year": 2024, "pub_month": 1, "pub_date": 1, "pub_day": "Monday",
+                "word_count": 500, "title_cleaned": "Cleaned Title A", "week": 1,
+                "log_claps": 4.6, "word_count_title": 3
+            }
+        ]
+        
+        # Call with publisher=None, cache should miss
+        get_articles_data()  # should miss
+        self.assertIn("all", cached_articles_data)  # Cache should now contain 'all'
+        
+        # Call again with publisher=None, cache should hit
+        get_articles_data()  # should hit
+        self.assertIn("all", cached_articles_data)  # Cache should still contain 'all'
+        
+    def tearDown(self):
+        cached_articles_data.clear()  # Clean up cache after each test
+
+
 # releases vs claps by week
 class GetReleasesClapsByWeekTests(TestCase):
     @patch('nlp_app.views.get_articles_data') 
@@ -45,7 +79,7 @@ class GetReleasesClapsByWeekTests(TestCase):
         self.assertJSONEqual(json_data, expected_response)
 
     def test_method_not_allowed(self):
-        # Simulate a POST request (or any method other than GET)
+        # Simulate a POST request
         response = self.client.post(reverse('releases-claps-by-week')) 
 
         # Check that the response status code is 405 (Method Not Allowed)
