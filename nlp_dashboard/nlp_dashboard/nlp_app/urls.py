@@ -7,12 +7,13 @@ from .views import (
     get_claps_distribution,
     get_publisher_count,
     get_nunique_authors,
-    )
+    get_bigram,
+)
 
 urlpatterns = [
     # PAGES
-    path('', home, name='home'),
-    path('text-mining/', text_mining, name="text-mining"),
+    path("", home, name="home"),
+    path("text-mining/", text_mining, name="text-mining"),
     # APIs - home
     # line chart
     path(
@@ -27,24 +28,29 @@ urlpatterns = [
     ),
     # bar-line chart: releases vs claps by day of week
     path(
-        'api/releases-claps-by-day/',
+        "api/releases-claps-by-day/",
         get_releases_claps_by_day,
-        name='releases-claps-by-day',
+        name="releases-claps-by-day",
     ),
     path(
-        'api/releases-claps-by-day/<str:publisher>/',
+        "api/releases-claps-by-day/<str:publisher>/",
         get_releases_claps_by_day,
-        name='releases-claps-by-day',
+        name="releases-claps-by-day",
     ),
-
     # box chart: claps distribution
-    path('api/claps-distribution/', get_claps_distribution, name='claps-distribution'),
-
+    path("api/claps-distribution/", get_claps_distribution, name="claps-distribution"),
     # donut chart: articles count per publisher
-    path('api/publisher-count/', get_publisher_count, name='publisher-count'),
-
+    path("api/publisher-count/", get_publisher_count, name="publisher-count"),
     # bar chart: unique authors count per publisher
-    path('api/nunique-authors/', get_nunique_authors, name='nunique-authors'),
-
+    path("api/nunique-authors/", get_nunique_authors, name="nunique-authors"),
+    
     # APIs - text mining
+    # bigram
+    path("api/bigram/", get_bigram, name="bigram"),
+    path("api/bigram/<str:publisher>/", get_bigram, name="bigram"),
+    # above average bigram
+    # trigram
+    # above average trigram
+    # LDA
+    # above average LDA
 ]
