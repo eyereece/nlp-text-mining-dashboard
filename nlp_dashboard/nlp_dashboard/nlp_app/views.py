@@ -317,6 +317,53 @@ def get_bigram(request, publisher=None):
 
 
 # above average bigram
+def get_above_avg_bigram(request, publisher=None):
+    """
+    Processes article titles to find the top 20 bigrams (two-word combinations) by frequency for a specified publisher.
+
+    Expected result: A JSON object, e.g.,
+        [
+            {"keywords": "data analysis", "frequencies": 12},
+            {"keywords": "machine learning", "frequencies": 10},
+            ...
+        ]
+    """
+    if request.method == "GET":
+        df = get_articles_data(publisher)
+        df = df[["title_cleaned", "claps"]]
+
+        # Calculate the average number of claps
+        avg_claps = df["claps"].mean()
+
+        # Filter df to only include titles with above avg claps
+        df = df[df["claps"] > avg_claps]
+
+        # Initialize the CountVectorizer to find bigrams
+        vectorizer = CountVectorizer(ngram_range=(2, 2), stop_words="english")
+
+        # Fit and transform the titles to get bigrams
+        X = vectorizer.fit_transform(df["title_cleaned"])
+
+        # Get the bigram feature names
+        bigram = vectorizer.get_feature_names_out()
+
+        # Sum the bigram frequencies
+        bigram_counts = X.sum(axis=0).A1
+
+        # Create a dictionary of bigrams and their counts
+        bigram_freq = dict(zip(bigram, bigram_counts))
+
+        # Find the top 20 bigrams by frequency
+        top_bigrams = Counter(bigram_freq).most_common(20)
+
+        # Create a list of dict
+        top_bigrams_dict = [
+            {"keywords": bigram, "frequencies": int(count)} for bigram, count in top_bigrams
+        ]
+
+        return JsonResponse(top_bigrams_dict, safe=False)
+    else:
+        return JsonResponse({"error": "Method not allowed"}, status=405)
 
 # trigram
 
@@ -349,10 +396,12 @@ def home(request):
 
 def text_mining(request):
     bigram_url = "/api/bigram/"
+    above_avg_bigram_url = "/api/above-avg-bigram/"
     return render(
         request,
         "text-mining.html",
         {
             "bigram_url": bigram_url,
+            "above_avg_bigram_url": above_avg_bigram_url,
         },
     )

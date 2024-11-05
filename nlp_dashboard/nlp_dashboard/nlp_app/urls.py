@@ -8,6 +8,7 @@ from .views import (
     get_publisher_count,
     get_nunique_authors,
     get_bigram,
+    get_above_avg_bigram,
 )
 
 urlpatterns = [
@@ -49,6 +50,8 @@ urlpatterns = [
     path("api/bigram/", get_bigram, name="bigram"),
     path("api/bigram/<str:publisher>/", get_bigram, name="bigram"),
     # above average bigram
+    path("api/above-avg-bigram/", get_above_avg_bigram, name="above-avg-bigram"),
+    path("api/above-avg-bigram/<str:publisher>/", get_above_avg_bigram, name="above-avg-bigram"),
     # trigram
     # above average trigram
     # LDA
