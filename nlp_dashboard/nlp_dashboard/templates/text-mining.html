@@ -83,6 +83,19 @@
     </div>
 
     <!-- SECTION 3 LDA -->
+    <h2>LDA Topic Modelling</h2>
+    <div class="container" id="lda-container">
+        <div class="chart-container">
+        <button id="all-lda">All Articles</button>
+        <button id="tds-lda">Towards Data Science</button>
+        <button id="luc-lda">Level Up Coding</button>
+        <button id="tai-lda">Towards AI</button>
+        <button id="jr-lda">Java Revisited</button>
+        <button id="det-lda">Data Engineer Things</button>
+        <div id="lda-visualization" data-url="{{ lda_url }}"></div>
+        </div>
+    </div>
+
     <script src="{% static 'js/textMining.js' %}?v={{ STATIC_VERSION }}"></script>
     <script>
         console.log("STATIC_VERSION:", "{{ STATIC_VERSION }}");

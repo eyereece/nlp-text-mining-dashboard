@@ -243,6 +243,50 @@ fetchTrigramTreemapData('');
 // END SECTION 2.2
 
 // SECTION 3 - LDA - all articles
+const baseLdaUrl = document.getElementById('lda-visualization').dataset.url;
+
+function loadLDA(publisher) {
+    const url = publisher ? `${baseLdaUrl}${publisher}/` : baseLdaUrl;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(data => {
+            // Remove the <link> tag from the fetched data
+            const cleanedData = data.replace(
+                /<link\s+rel="stylesheet"\s+type="text\/css"\s+href="https:\/\/cdn\.jsdelivr\.net\/gh\/bmabey\/pyLDAvis@3\.4\.0\/pyLDAvis\/js\/ldavis\.v1\.0\.0\.css">|<div\s+id="ldavis_el80560130213428323584276775"\s+style="background-color:white;"><\/div>/g,
+                                    ''
+            );
+            document.getElementById('lda-visualization').innerHTML = cleanedData;
+
+            // Create a new script element
+            const scriptMatch = cleanedData.match(/<script[^>]*>([\s\S]*?)<\/script>/);
+            if (scriptMatch) {
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.text = scriptMatch[1]; // Extract script content
+                document.body.appendChild(script);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching LDA data: ', error);
+        });
+}
+
+// Event Listeners
+document.getElementById('all-lda').addEventListener('click', () => loadLDA());
+document.getElementById('tds-lda').addEventListener('click', () => loadLDA('Towards Data Science'));
+document.getElementById('luc-lda').addEventListener('click', () => loadLDA('Level Up Coding'));
+document.getElementById('tai-lda').addEventListener('click', () => loadLDA('Towards AI'));
+document.getElementById('jr-lda').addEventListener('click', () => loadLDA('Javarevisited'));
+document.getElementById('det-lda').addEventListener('click', () => loadLDA('Data Engineer Things'));
+
+// Call Initial Load
+loadLDA(); // Load default LDA data
 // END SECTION 3
 
 // SECTION 4 - LDA - above average articles
