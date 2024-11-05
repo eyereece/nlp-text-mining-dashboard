@@ -20,6 +20,7 @@ from nlp_app.views import (
     get_trigram,
     get_above_avg_trigram,
     get_lda,
+    get_above_avg_lda,
 )
 
 # TESTS
@@ -502,6 +503,53 @@ class LDATestCase(TestCase):
         self.assertEqual(response.json(), {"error": "Method not allowed"})
 
 
-
-
 # ABOVE AVERAGE LDA
+class AboveAvgLDATestCase(TestCase):
+    @patch("nlp_app.views.pyLDAvis.prepared_data_to_html")
+    @patch("nlp_app.views.get_articles_data")
+    def test_get_above_avg_lda_w_publisher(self, mock_get_articles_data, mock_prepared_data_to_html):
+        # Mock the df returned by get_articles_data
+        mock_get_articles_data.return_value = pd.DataFrame({
+            "title_cleaned": ["This is a test article", "Another test article"],
+            "tokens": [["this", "is", "test", "article"], ["another", "test", "article"]],
+            "claps": [5, 10]
+        })
+
+        # Mock the HTML output from pyLDAvis
+        mock_prepared_data_to_html.return_value = "<html>LDA Visualization</html>"
+
+        # Simulate a GET request with a publisher
+        response = self.client.get(reverse("above-avg-lda-publisher", args=["tds"]))
+
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("<html>LDA Visualization</html>", response.content.decode("utf-8"))
+
+    @patch("nlp_app.views.pyLDAvis.prepared_data_to_html")
+    @patch("nlp_app.views.get_articles_data")
+    def test_get_above_avg_lda_without_publisher(self, mock_get_articles_data, mock_prepared_data_to_html):
+        # Mock the df returned by get_articles_data for all articles
+        mock_get_articles_data.return_value = pd.DataFrame({
+            "title_cleaned": ["This is a test article", "Another test article"],
+            "tokens": [["this", "is", "test", "article"], ["another", "test", "article"]],
+            "claps": [5, 10]
+        })
+
+        # Mock the HTML output from pyLDAvis
+        mock_prepared_data_to_html.return_value = "<html>LDA Visualization</html>"
+
+        # Simulate a GET request without a publisher
+        response = self.client.get(reverse("above-avg-lda"))
+
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("<html>LDA Visualization</html>", response.content.decode("utf-8"))
+
+    def test_get_above_avg_lda_not_allowed(self):
+        # Test with a non-GET request
+        response = self.client.post(reverse("above-avg-lda"))
+
+        # Assertions
+        self.assertEqual(response.status_code, 405)
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.json(), {"error": "Method not allowed"})

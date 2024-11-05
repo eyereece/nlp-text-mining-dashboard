@@ -12,6 +12,7 @@ from .views import (
     get_trigram,
     get_above_avg_trigram,
     get_lda,
+    get_above_avg_lda,
 )
 
 urlpatterns = [
@@ -70,6 +71,8 @@ urlpatterns = [
     ),
     # LDA
     path("lda/", get_lda, name="lda-all"),
-    path("lda/<str:publisher>/", get_lda, name="lda-publisher")
+    path("lda/<str:publisher>/", get_lda, name="lda-publisher"),
     # above average LDA
+    path("above-avg-lda/", get_above_avg_lda, name="above-avg-lda"),
+    path("above-avg-lda/<str:publisher>/", get_above_avg_lda, name="above-avg-lda-publisher"),
 ]

@@ -484,7 +484,7 @@ def get_lda(request, publisher=None):
         )
         vis = gensimvis.prepare(lda_model, corpus, dictionary)
 
-        # Generte HTML for the visualization
+        # Generate HTML for the visualization
         lda_html = pyLDAvis.prepared_data_to_html(vis)
 
         return HttpResponse(lda_html)
@@ -493,6 +493,33 @@ def get_lda(request, publisher=None):
 
 
 # above average lda
+def get_above_avg_lda(request, publisher=None):
+    if request.method == "GET":
+        df = get_articles_data(publisher)
+        df["tokens"] = df["title_cleaned"].apply(preprocess_text)
+        df = df[["title_cleaned", "tokens", "claps"]]
+        avg_claps = df["claps"].mean()
+
+        # Filter df to only include data with above avg claps
+        df = df[df["claps"] > avg_claps]
+
+        # Create a dictionary and corpus for LDA
+        dictionary = corpora.Dictionary(df["tokens"])
+        corpus = [dictionary.doc2bow(text) for text in df["tokens"]]
+
+        # Build the LDA model
+        lda_model = LdaModel(
+            corpus=corpus, id2word=dictionary, num_topics=5, random_state=42
+        )
+        vis = gensimvis.prepare(lda_model, corpus, dictionary)
+
+        # Generate HTML for the visualization
+        lda_html = pyLDAvis.prepared_data_to_html(vis)
+
+        return HttpResponse(lda_html)
+
+    else:
+        return JsonResponse({"error": "Method not allowed"}, status=405)
 
 
 # VIEWS
@@ -521,6 +548,7 @@ def text_mining(request):
     trigram_url = "/api/trigram/"
     above_avg_trigram_url = "/api/above-avg-trigram/"
     lda_url = "/lda/"
+    above_avg_lda_url = "/above-avg-lda/"
     return render(
         request,
         "text-mining.html",
@@ -530,5 +558,6 @@ def text_mining(request):
             "trigram_url": trigram_url,
             "above_avg_trigram_url": above_avg_trigram_url,
             "lda_url": lda_url,
+            "above_avg_lda_url": above_avg_lda_url,
         },
     )
