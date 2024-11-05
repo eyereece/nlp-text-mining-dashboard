@@ -10,6 +10,7 @@ from .views import (
     get_bigram,
     get_above_avg_bigram,
     get_trigram,
+    get_above_avg_trigram,
 )
 
 urlpatterns = [
@@ -45,18 +46,27 @@ urlpatterns = [
     path("api/publisher-count/", get_publisher_count, name="publisher-count"),
     # bar chart: unique authors count per publisher
     path("api/nunique-authors/", get_nunique_authors, name="nunique-authors"),
-    
     # APIs - text mining
     # bigram
     path("api/bigram/", get_bigram, name="bigram"),
     path("api/bigram/<str:publisher>/", get_bigram, name="bigram"),
     # above average bigram
     path("api/above-avg-bigram/", get_above_avg_bigram, name="above-avg-bigram"),
-    path("api/above-avg-bigram/<str:publisher>/", get_above_avg_bigram, name="above-avg-bigram"),
+    path(
+        "api/above-avg-bigram/<str:publisher>/",
+        get_above_avg_bigram,
+        name="above-avg-bigram",
+    ),
     # trigram
     path("api/trigram/", get_trigram, name="trigram"),
     path("api/trigram/<str:publisher>/", get_trigram, name="trigram"),
     # above average trigram
+    path("api/above-avg-trigram/", get_above_avg_trigram, name="above-avg-trigram"),
+    path(
+        "api/above-avg-trigram/<str:publisher>/",
+        get_above_avg_trigram,
+        name="above-avg-trigram",
+    ),
     # LDA
     # above average LDA
 ]

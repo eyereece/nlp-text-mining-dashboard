@@ -358,12 +358,14 @@ def get_above_avg_bigram(request, publisher=None):
 
         # Create a list of dict
         top_bigrams_dict = [
-            {"keywords": bigram, "frequencies": int(count)} for bigram, count in top_bigrams
+            {"keywords": bigram, "frequencies": int(count)}
+            for bigram, count in top_bigrams
         ]
 
         return JsonResponse(top_bigrams_dict, safe=False)
     else:
         return JsonResponse({"error": "Method not allowed"}, status=405)
+
 
 # trigram
 def get_trigram(request, publisher=None):
@@ -411,6 +413,54 @@ def get_trigram(request, publisher=None):
 
 
 # above average trigram
+def get_above_avg_trigram(request, publisher=None):
+    """
+    Processes article titles to find the top 20 trigrams (three-word combinations) by frequency for a specified publisher.
+
+    Expected result: A JSON object, e.g.,
+        [
+            {"keywords": "time series analysis", "frequencies": 12},
+            {"keywords": "large language models", "frequencies": 10},
+            ...
+        ]
+    """
+    if request.method == "GET":
+        df = get_articles_data(publisher)
+        df = df[["title_cleaned", "claps"]]
+
+        # Calculate the average number of claps
+        avg_claps = df["claps"].mean()
+
+        # Filter df to only include title with above avg claps
+        df = df[df["claps"] > avg_claps]
+
+        # Initialize the CountVectorizer to find trigrams
+        vectorizer = CountVectorizer(ngram_range=(2, 2), stop_words="english")
+
+        # Fit and transform the titles to get trigrams
+        X = vectorizer.fit_transform(df["title_cleaned"])
+
+        # Get the trigram feature names
+        trigram = vectorizer.get_feature_names_out()
+
+        # Sum the trigram frequencies
+        trigram_counts = X.sum(axis=0).A1
+
+        # Create a dictionary of trigrams and their counts
+        trigram_freq = dict(zip(trigram, trigram_counts))
+
+        # Find the top 20 trigrams by frequency
+        top_trigrams = Counter(trigram_freq).most_common(20)
+
+        # Create a list of dict
+        top_trigrams_dict = [
+            {"keywords": trigram, "frequencies": int(count)}
+            for trigram, count in top_trigrams
+        ]
+        return JsonResponse(top_trigrams_dict, safe=False)
+    else:
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+
 
 # lda
 
@@ -441,6 +491,7 @@ def text_mining(request):
     bigram_url = "/api/bigram/"
     above_avg_bigram_url = "/api/above-avg-bigram/"
     trigram_url = "/api/trigram/"
+    above_avg_trigram_url = "/api/above-avg-trigram/"
     return render(
         request,
         "text-mining.html",
@@ -448,5 +499,6 @@ def text_mining(request):
             "bigram_url": bigram_url,
             "above_avg_bigram_url": above_avg_bigram_url,
             "trigram_url": trigram_url,
+            "above_avg_trigram_url": above_avg_trigram_url,
         },
     )

@@ -18,6 +18,7 @@ from nlp_app.views import (
     get_bigram,
     get_above_avg_bigram,
     get_trigram,
+    get_above_avg_trigram,
 )
 
 # TESTS
@@ -283,24 +284,27 @@ class NuniqueAuthorsTest(TestCase):
 
 # API 2 - TEXT MINING
 
+
 # BIGRAM
 class BigramTest(TestCase):
-    @patch('nlp_app.views.get_articles_data')
+    @patch("nlp_app.views.get_articles_data")
     def test_get_bigram(self, mock_get_articles_data):
-        mock_data = pd.DataFrame([
-            {"title_cleaned": "Data science is great"},
-            {"title_cleaned": "Data science is fun"},
-            {"title_cleaned": "Machine learning in data science"},
-            {"title_cleaned": "Deep learning for data"},
-            {"title_cleaned": "Machine learning and AI"},
-        ])
+        mock_data = pd.DataFrame(
+            [
+                {"title_cleaned": "Data science is great"},
+                {"title_cleaned": "Data science is fun"},
+                {"title_cleaned": "Machine learning in data science"},
+                {"title_cleaned": "Deep learning for data"},
+                {"title_cleaned": "Machine learning and AI"},
+            ]
+        )
         mock_get_articles_data.return_value = mock_data
 
         # Simulate a GET request
-        response = self.client.get(reverse('bigram'))
+        response = self.client.get(reverse("bigram"))
 
         # Decode the response content
-        json_data = response.content.decode('utf-8')
+        json_data = response.content.decode("utf-8")
 
         # Assertions
         self.assertEqual(response.status_code, 200)
@@ -321,26 +325,28 @@ class BigramTest(TestCase):
             self.assertIn("frequencies", item)
             self.assertIsInstance(item["keywords"], str)
             self.assertIsInstance(item["frequencies"], int)
-            
+
 
 # ABOVE AVERAGE BIGRAM
 class AboveAvgBigramTest(TestCase):
-    @patch('nlp_app.views.get_articles_data')
+    @patch("nlp_app.views.get_articles_data")
     def test_get_above_avg_bigram(self, mock_get_articles_data):
-        mock_data = pd.DataFrame([
-            {"title_cleaned": "Data science is great", "claps": 10},
-            {"title_cleaned": "Data science is fun", "claps": 20},
-            {"title_cleaned": "Machine learning in data science", "claps": 15},
-            {"title_cleaned": "Deep learning for data", "claps": 5},
-            {"title_cleaned": "Machine learning and AI", "claps": 25},
-        ])
+        mock_data = pd.DataFrame(
+            [
+                {"title_cleaned": "Data science is great", "claps": 10},
+                {"title_cleaned": "Data science is fun", "claps": 20},
+                {"title_cleaned": "Machine learning in data science", "claps": 15},
+                {"title_cleaned": "Deep learning for data", "claps": 5},
+                {"title_cleaned": "Machine learning and AI", "claps": 25},
+            ]
+        )
         mock_get_articles_data.return_value = mock_data
 
         # Simulate a GET request
-        response = self.client.get(reverse('above-avg-bigram'))
+        response = self.client.get(reverse("above-avg-bigram"))
 
         # Decode the response content
-        json_data = response.content.decode('utf-8')
+        json_data = response.content.decode("utf-8")
 
         # Assertions
         self.assertEqual(response.status_code, 200)
@@ -365,19 +371,61 @@ class AboveAvgBigramTest(TestCase):
 
 # TRIGRAM
 class TrigramTest(TestCase):
+    @patch("nlp_app.views.get_articles_data")
+    def test_get_trigram(self, mock_get_articles_data):
+        mock_data = pd.DataFrame(
+            [
+                {"title_cleaned": "Data science is great"},
+                {"title_cleaned": "Data science is fun"},
+                {"title_cleaned": "Machine learning in data science"},
+                {"title_cleaned": "Deep learning for data"},
+                {"title_cleaned": "Machine learning and AI"},
+            ]
+        )
+        mock_get_articles_data.return_value = mock_data
+
+        # Simulate a GET request
+        response = self.client.get(reverse("trigram"))
+
+        # Decode the response content
+        json_data = response.content.decode("utf-8")
+
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/json")
+
+        # Load the response content
+        data = json.loads(response.content.decode("utf-8"))
+
+        # Check the structure of the returned data
+        self.assertIsInstance(data, list)
+
+        # Check that the expected number of trigrams is returned
+        self.assertLessEqual(len(data), 20)
+
+        # Check the keys in the returned dictionaries
+        for item in data:
+            self.assertIn("keywords", item)
+            self.assertIn("frequencies", item)
+            self.assertIsInstance(item["keywords"], str)
+            self.assertIsInstance(item["frequencies"], int)
+
+
+# ABOVE AVERAGE TRIGRAM
+class AboveAvgTrigramTest(TestCase):
     @patch('nlp_app.views.get_articles_data')
     def test_get_trigram(self, mock_get_articles_data):
         mock_data = pd.DataFrame([
-            {"title_cleaned": "Data science is great"},
-            {"title_cleaned": "Data science is fun"},
-            {"title_cleaned": "Machine learning in data science"},
-            {"title_cleaned": "Deep learning for data"},
-            {"title_cleaned": "Machine learning and AI"},
+            {"title_cleaned": "Data science is great", "claps": 15},
+            {"title_cleaned": "Data science is fun", "claps": 10},
+            {"title_cleaned": "Machine learning in data science", "claps": 25},
+            {"title_cleaned": "Deep learning for data", "claps": 20},
+            {"title_cleaned": "Machine learning and AI", "claps": 5},
         ])
         mock_get_articles_data.return_value = mock_data
 
         # Simulate a GET request
-        response = self.client.get(reverse('trigram'))
+        response = self.client.get(reverse('above-avg-trigram'))
 
         # Decode the response content
         json_data = response.content.decode('utf-8')
@@ -401,8 +449,6 @@ class TrigramTest(TestCase):
             self.assertIn("frequencies", item)
             self.assertIsInstance(item["keywords"], str)
             self.assertIsInstance(item["frequencies"], int)
-
-# ABOVE AVERAGE TRIGRAM
 
 # LDA
 
