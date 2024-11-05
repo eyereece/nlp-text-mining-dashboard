@@ -9,7 +9,7 @@ from nltk.corpus import stopwords
 from gensim import corpora
 from gensim.models import LdaModel
 import pyLDAvis
-import pyLDAvis.gensim_models as gensimsvis
+import pyLDAvis.gensim_models as gensimvis
 import re
 
 import pandas as pd
@@ -461,8 +461,36 @@ def get_above_avg_trigram(request, publisher=None):
     else:
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
+# helper function to process text
+def preprocess_text(text):
+    # Tokenize the text, remove non-alphabetic characters, stop words, and lowercase them
+    tokens = re.findall(r"\b\w+\b", text.lower())
+    return [word for word in tokens if word not in stop_words]
 
 # lda
+def get_lda(request, publisher=None):
+    if request.method == "GET":
+        df = get_articles_data(publisher)
+        df["tokens"] = df["title_cleaned"].apply(preprocess_text)
+        df = df[["title_cleaned", "tokens"]]
+
+        # Create a dictionary and corpus for LDA
+        dictionary = corpora.Dictionary(df["tokens"])
+        corpus = [dictionary.doc2bow(text) for text in df["tokens"]]
+
+        # Build the LDA model
+        lda_model = LdaModel(
+            corpus=corpus, id2word=dictionary, num_topics=5, random_state=42
+        )
+        vis = gensimvis.prepare(lda_model, corpus, dictionary)
+
+        # Generte HTML for the visualization
+        lda_html = pyLDAvis.prepared_data_to_html(vis)
+
+        return HttpResponse(lda_html)
+    else:
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+
 
 # above average lda
 
@@ -492,6 +520,7 @@ def text_mining(request):
     above_avg_bigram_url = "/api/above-avg-bigram/"
     trigram_url = "/api/trigram/"
     above_avg_trigram_url = "/api/above-avg-trigram/"
+    lda_url = "/lda/"
     return render(
         request,
         "text-mining.html",
@@ -500,5 +529,6 @@ def text_mining(request):
             "above_avg_bigram_url": above_avg_bigram_url,
             "trigram_url": trigram_url,
             "above_avg_trigram_url": above_avg_trigram_url,
+            "lda_url": lda_url,
         },
     )
