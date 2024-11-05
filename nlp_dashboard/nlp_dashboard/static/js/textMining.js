@@ -290,4 +290,48 @@ loadLDA(); // Load default LDA data
 // END SECTION 3
 
 // SECTION 4 - LDA - above average articles
+const aboveAvgLdaUrl = document.getElementById('abv-lda-visualization').dataset.url;
+
+function loadAbvLDA(publisher) {
+    const url = publisher ? `${aboveAvgLdaUrl}${publisher}/` : aboveAvgLdaUrl;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(data => {
+            // Remove the <link> tag from the fetched data
+            const cleanedData = data.replace(
+                /<link\s+rel="stylesheet"\s+type="text\/css"\s+href="https:\/\/cdn\.jsdelivr\.net\/gh\/bmabey\/pyLDAvis@3\.4\.0\/pyLDAvis\/js\/ldavis\.v1\.0\.0\.css">|<div\s+id="ldavis_el80560130213428323584276775"\s+style="background-color:white;"><\/div>/g,
+                                    ''
+            );
+            document.getElementById('abv-lda-visualization').innerHTML = cleanedData;
+
+            // Create a new script element
+            const scriptMatch = cleanedData.match(/<script[^>]*>([\s\S]*?)<\/script>/);
+            if (scriptMatch) {
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.text = scriptMatch[1];
+                document.body.appendChild(script);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching LDA data: ', error);
+        });
+}
+
+// Event Listeners
+document.getElementById('all-abv-lda').addEventListener('click', () => loadAbvLDA());
+document.getElementById('tds-abv-lda').addEventListener('click', () => loadAbvLDA('Towards Data Science'));
+document.getElementById('luc-abv-lda').addEventListener('click', () => loadAbvLDA('Level Up Coding'));
+document.getElementById('tai-abv-lda').addEventListener('click', () => loadAbvLDA('Towards AI'));
+document.getElementById('jr-abv-lda').addEventListener('click', () => loadAbvLDA('Javarevisited'));
+document.getElementById('det-abv-lda').addEventListener('click', () => loadAbvLDA('Data Engineer Things'));
+
+// Call Initial Load
+loadAbvLDA();
 // END SECTION 4

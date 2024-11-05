@@ -96,6 +96,20 @@
         </div>
     </div>
 
+    <!-- SECTION 4 ABOVE AVERAGE LDA -->
+     <h2>LDA for better performing articles</h2>
+    <div class="container" id="above-avg-lda-container">
+        <div class="chart-container">
+        <button id="all-abv-lda">All Articles</button>
+        <button id="tds-abv-lda">Towards Data Science</button>
+        <button id="luc-abv-lda">Level Up Coding</button>
+        <button id="tai-abv-lda">Towards AI</button>
+        <button id="jr-abv-lda">Java Revisited</button>
+        <button id="det-abv-lda">Data Engineer Things</button>
+        <div id="abv-lda-visualization" data-url="{{ above_avg_lda_url }}"></div>
+        </div>
+    </div>
+
     <script src="{% static 'js/textMining.js' %}?v={{ STATIC_VERSION }}"></script>
     <script>
         console.log("STATIC_VERSION:", "{{ STATIC_VERSION }}");
