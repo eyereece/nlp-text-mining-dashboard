@@ -42,7 +42,17 @@
             <div id="table-container" data-url="{{ bigram_url}}"></div>
         </div>
         <!-- SECTION 1.2 TREEMAP - bigram - above avg engagement articles-->
-     </div>
+        <div class="chart-container">
+            <h3>Above Average Engagement</h3>
+            <button id="all-bi-treemap">All Articles</button>
+            <button id="tds-bi-treemap">Towards Data Science</button>
+            <button id="luc-bi-treemap">Level Up Coding</button>
+            <button id="tai-bi-treemap">Towards AI</button>
+            <button id="jr-bi-treemap">Java Revisited</button>
+            <button id="det-bi-treemap">Data Engineer Things</button>
+            <canvas id="bigram-treemap" data-url="{{ above_avg_bigram_url }}"></canvas>
+        </div>
+    </div>
 
     <!-- SECTION 2 TRIGRAM -->
 

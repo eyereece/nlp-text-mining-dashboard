@@ -60,6 +60,69 @@ fetchBigramTableData();
 // END SECTION 1.1
 
 // SECTION 1.2 TREEMAP - Bigram
+const baseBigramTreemapUrl = document.getElementById('bigram-treemap').dataset.url;
+
+function fetchBigramTreemapData(publisher = '') {
+    // Construct the URL based on the selected publisher
+    const url = publisher ? `${baseBigramTreemapUrl}${publisher}/` : baseBigramTreemapUrl;
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            // Prepare data for treemap
+            const treemapData = data.map(item => ({
+                category: item.keywords,
+                value: item.frequencies
+            }));
+
+            const ctxBigramTreemap = document.getElementById('bigram-treemap').getContext('2d');
+
+            // Destroy previous chart if it exists
+            if (window.biTreemapChart) {
+                window.biTreemapChart.destroy();
+            }
+
+            // Create a new treemap chart
+            window.biTreemapChart = new Chart(ctxBigramTreemap, {
+                type: 'treemap',
+                data: {
+                    datasets: [{
+                        label: publisher === '' ? 'All Articles' : publisher,
+                        tree: treemapData,
+                        key: 'value',
+                        groups: ['category'],
+                        backgroundColor: (ctxBigramTreemap) => colorWithBlue(ctxBigramTreemap),
+                        borderColor: 'black',
+                        borderWidth: 1,
+                        labels: {
+                            align: 'center',
+                            display: true,
+                            color: 'whiteSmoke',
+                            font: {
+                                size: 12
+                            },
+                            hoverFont: {
+                                size: 12,
+                                weight: 'bold'
+                            }
+                        }
+                    }]
+                },
+            });
+        })
+        .catch(error => console.error("Error fetching above average bigram data: ", error));
+}
+
+// Add event listeners for the buttons
+document.getElementById('all-bi-treemap').addEventListener('click', () => fetchBigramTreemapData(''));
+document.getElementById('tds-bi-treemap').addEventListener('click', () => fetchBigramTreemapData('Towards Data Science'));
+document.getElementById('luc-bi-treemap').addEventListener('click', () => fetchBigramTreemapData('Level Up Coding'));
+document.getElementById('tai-bi-treemap').addEventListener('click', () => fetchBigramTreemapData('Towards AI'));
+document.getElementById('jr-bi-treemap').addEventListener('click', () => fetchBigramTreemapData('Javarevisited'));
+document.getElementById('det-bi-treemap').addEventListener('click', () => fetchBigramTreemapData('Data Engineer Things'));
+
+// Initially load data for all articles
+fetchBigramTreemapData();
+
 // END SECTION 1.2
 
 
