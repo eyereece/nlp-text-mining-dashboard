@@ -176,7 +176,70 @@ document.getElementById('det-tri-table').addEventListener('click', () => fetchTr
 fetchTrigramTableData();
 // END SECTION 2.1
 
-// SECTION 2.2 TREEMAP - Trigram
+// SECTION 2.2 TREEMAP - Trigram - higher engagement
+const baseTrigramTreemapUrl = document.getElementById('trigram-treemap').dataset.url;
+
+function fetchTrigramTreemapData(publisher = '') {
+    // Construct the URL based on the selected publisher
+    const url = publisher ? `${baseTrigramTreemapUrl}${publisher}/` : baseTrigramTreemapUrl;
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            // Prepare data for treemap trigram
+            const triTreemapData = data.map(item => ({
+                category: item.keywords,
+                value: item.frequencies
+            }));
+
+            const ctxTrigramTreemap = document.getElementById("trigram-treemap").getContext("2d");
+
+            // Destroy previous chart if it exists
+            if (window.triTreemapChart) {
+                window.triTreemapChart.destroy();
+            }
+
+            // Create a new treemap chart
+            window.triTreemapChart = new Chart(ctxTrigramTreemap, {
+                type: 'treemap',
+                data: {
+                    datasets: [{
+                        label: publisher === "" ? "All Articles" : publisher,
+                        tree: triTreemapData,
+                        key: 'value',
+                        groups: ['category'],
+                        backgroundColor: (ctxTrigramTreemap) => colorWithBlue(ctxTrigramTreemap),
+                        borderColor: 'black',
+                        borderWidth: 1,
+                        labels: {
+                            align: 'center',
+                            display: true,
+                            color: 'whiteSmoke',
+                            font: {
+                                size: 12
+                            },
+                            hoverFont: {
+                                size: 12,
+                                weight: 'bold'
+                            }
+                        }
+                    }]
+                }
+            });
+        })
+        .catch(error => console.error("Error fetching above average trigram data: ", error));
+}
+
+// Add event listeners for the buttons
+document.getElementById('all-tri-treemap').addEventListener('click', () => fetchTrigramTreemapData(''));
+document.getElementById('tds-tri-treemap').addEventListener('click', () => fetchTrigramTreemapData('Towards Data Science'));
+document.getElementById('luc-tri-treemap').addEventListener('click', () => fetchTrigramTreemapData('Level Up Coding'));
+document.getElementById('tai-tri-treemap').addEventListener('click', () => fetchTrigramTreemapData('Towards AI'));
+document.getElementById('jr-tri-treemap').addEventListener('click', () => fetchTrigramTreemapData('Javarevisited'));
+document.getElementById('det-tri-treemap').addEventListener('click', () => fetchTrigramTreemapData('Data Engineer Things'));
+
+// Default to all
+fetchTrigramTreemapData('');
+
 // END SECTION 2.2
 
 // SECTION 3 - LDA - all articles

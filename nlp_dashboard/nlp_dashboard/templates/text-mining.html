@@ -67,9 +67,20 @@
         <button id="jr-tri-table">Java Revisited</button>
         <button id="det-tri-table">Data Engineer Things</button>
         <div id="tri-table-container" data-url="{{ trigram_url }}"></div>
-        </div>
+    </div>
     <!-- SECTION 2.2 TREEMAP - Trigram - above avg engagement articles -->
-     </div>
+    <div class="chart-container">
+        <h3>Above Average Engagement</h3>
+        <button id="all-tri-treemap">All Articles</button>
+        <button id="tds-tri-treemap">Towards Data Science</button>
+        <button id="luc-tri-treemap">Level Up Coding</button>
+        <button id="tai-tri-treemap">Towards AI</button>
+        <button id="jr-tri-treemap">Java Revisited</button>
+        <button id="det-tri-treemap">Data Engineer Things</button>
+        <canvas id="trigram-treemap" data-url="{{ above_avg_trigram_url }}"></canvas>
+        </div>
+    </div>
+    </div>
 
     <!-- SECTION 3 LDA -->
     <script src="{% static 'js/textMining.js' %}?v={{ STATIC_VERSION }}"></script>

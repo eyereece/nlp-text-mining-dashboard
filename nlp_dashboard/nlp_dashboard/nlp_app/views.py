@@ -435,7 +435,7 @@ def get_above_avg_trigram(request, publisher=None):
         df = df[df["claps"] > avg_claps]
 
         # Initialize the CountVectorizer to find trigrams
-        vectorizer = CountVectorizer(ngram_range=(2, 2), stop_words="english")
+        vectorizer = CountVectorizer(ngram_range=(3, 3), stop_words="english")
 
         # Fit and transform the titles to get trigrams
         X = vectorizer.fit_transform(df["title_cleaned"])
