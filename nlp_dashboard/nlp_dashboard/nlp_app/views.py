@@ -366,6 +366,49 @@ def get_above_avg_bigram(request, publisher=None):
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
 # trigram
+def get_trigram(request, publisher=None):
+    """
+    Processes article titles to find the top 20 trigrams (three-word combinations) by frequency for a specified publisher.
+
+    Expected result: A JSON object, e.g.,
+        [
+            {"keywords": "time series analysis", "frequencies": 12},
+            {"keywords": "large language models", "frequencies": 10},
+            ...
+        ]
+    """
+    if request.method == "GET":
+        df = get_articles_data(publisher)
+        df = df["title_cleaned"]
+
+        # Initialize the CountVectorizer to find trigrams
+        vectorizer = CountVectorizer(ngram_range=(3, 3), stop_words="english")
+
+        # Fit and transform the titles to get the trigrams
+        X = vectorizer.fit_transform(df)
+
+        # Get the trigram feature names
+        trigram = vectorizer.get_feature_names_out()
+
+        # Sum the trigram frequencies
+        trigram_counts = X.sum(axis=0).A1
+
+        # Create a dictionary of trigrams and their counts
+        trigram_freq = dict(zip(trigram, trigram_counts))
+
+        # Find the top 20 trigrams by frequency
+        top_trigrams = Counter(trigram_freq).most_common(20)
+
+        # Create a list of dict
+        top_trigrams_dict = [
+            {"keywords": trigram, "frequencies": int(count)}
+            for trigram, count in top_trigrams
+        ]
+
+        return JsonResponse(top_trigrams_dict, safe=False)
+    else:
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+
 
 # above average trigram
 
@@ -397,11 +440,13 @@ def home(request):
 def text_mining(request):
     bigram_url = "/api/bigram/"
     above_avg_bigram_url = "/api/above-avg-bigram/"
+    trigram_url = "/api/trigram/"
     return render(
         request,
         "text-mining.html",
         {
             "bigram_url": bigram_url,
             "above_avg_bigram_url": above_avg_bigram_url,
+            "trigram_url": trigram_url,
         },
     )
