@@ -127,6 +127,53 @@ fetchBigramTreemapData();
 
 
 // SECTION 2.1 TABLE - Trigram
+const baseTrigramTableUrl = document.getElementById('tri-table-container').dataset.url;
+const triTableContainer = document.getElementById('tri-table-container');
+
+function fetchTrigramTableData(publisher = '') {
+    const url = publisher ? `${baseTrigramTableUrl}${publisher}/` : baseTrigramTableUrl;
+
+    // Fetch Trigram Data
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            // Clear previous table
+            triTableContainer.innerHTML = "";
+
+            // Create a new table
+            const table = document.createElement("table");
+            table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>Keywords</th>
+                    <th>Frequency</th>
+                </tr>
+            </thead>
+            <tbody>
+            ${data.map(item => `
+                <tr>
+                    <td>${item.keywords}</td>
+                    <td>${item.frequencies}</td>
+                </tr>
+                `).join('')}
+                </tbody>
+        `;
+        // Append the table to the triTableContainer
+        triTableContainer.appendChild(table);
+        })
+        .catch(error => console.error("Error fetching Trigram data: ", error));
+}
+
+// Buttons for Trigram Table
+document.getElementById('all-tri-table').addEventListener('click', () => fetchTrigramTableData());
+document.getElementById('tds-tri-table').addEventListener('click', () => fetchTrigramTableData('Towards Data Science'));
+document.getElementById('luc-tri-table').addEventListener('click', () => fetchTrigramTableData('Level Up Coding'));
+document.getElementById('tai-tri-table').addEventListener('click', () => fetchTrigramTableData('Towards AI'));
+document.getElementById('jr-tri-table').addEventListener('click', () => fetchTrigramTableData('Javarevisited'));
+document.getElementById('det-tri-table').addEventListener('click', () => fetchTrigramTableData('Data Engineer Things'));
+
+// Default load to all articles
+fetchTrigramTableData();
 // END SECTION 2.1
 
 // SECTION 2.2 TREEMAP - Trigram
