@@ -2,6 +2,7 @@ from django.urls import path
 from .views import (
     home,
     text_mining,
+    walkthrough,
     get_releases_claps_by_week,
     get_releases_claps_by_day,
     get_claps_distribution,
@@ -19,6 +20,7 @@ urlpatterns = [
     # PAGES
     path("", home, name="home"),
     path("text-mining/", text_mining, name="text-mining"),
+    path("walkthrough/", walkthrough, name="walkthrough"),
     # APIs - home
     # line chart
     path(

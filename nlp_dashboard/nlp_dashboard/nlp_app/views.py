@@ -561,3 +561,6 @@ def text_mining(request):
             "above_avg_lda_url": above_avg_lda_url,
         },
     )
+
+def walkthrough(request):
+    return render(request, "walkthrough.html")

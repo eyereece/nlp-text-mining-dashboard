@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tea.io - NLP Text Mining Dashboard</title>
+    {% load static %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@3.0.0/dist/chartjs-chart-treemap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="{% static 'css/styles.css' %}?v={{ STATIC_VERSION }}"> -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="toolbar">
+        <div class="toolbar__center">
+        <ul class="nav nav-pills nav-justified">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'home' %}">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class ="nav-link" href="{% url 'text-mining' %}">Text Mining</a>
+            </li>
+            <li class="nav-item">
+                <a class ="nav-link active" href="{% url 'walkthrough' %}">Walkthrough</a>
+            </li>
+        </ul>
+        </div>
+    </div>
+
+    <h1>Walkthrough</h1>
+    <p>xxx</p>
+
+    <h3 class="walkthrough">LDA Topic Modelling Guide</h3>
+    <br/>
+    <!--Image-->
+    <img src="{% static 'images/lda-abv-avg.png' %}" alt="LDA Above Average" style="width: 500px; height: auto;">
+
+    <footer>
+        <p>&copy; Joan Kusuma</p>
+    </footer>
+</body>
+</html>

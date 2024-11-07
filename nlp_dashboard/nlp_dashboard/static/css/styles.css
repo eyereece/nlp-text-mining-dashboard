@@ -181,3 +181,15 @@ tr:hover {
         flex-direction: column;
     }
 }
+
+.walkthrough {
+    /* background: white; */
+    background: linear-gradient(to bottom right, rgba(30, 144, 255, 1), rgba(255, 255, 255, 1));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: left !important; /* Force left alignment */
+    display: inline-block; /* Keeps the width to the content */
+    margin-left: 0 !important; /* Removes any left margin */
+    margin-right: auto; /* Allows it to align to the left */
+}

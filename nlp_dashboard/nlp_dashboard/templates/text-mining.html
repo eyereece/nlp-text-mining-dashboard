@@ -18,11 +18,16 @@
             <li class="nav-item">
                 <a class ="nav-link active" href="{% url 'text-mining' %}">Text Mining</a>
             </li>
+            <li class="nav-item">
+                <a class ="nav-link" href="{% url 'walkthrough' %}">Walkthrough</a>
+            </li>
         </ul>
         </div>
     </div>
 
     <h1>Text Mining</h1>
+    <p>Text mining is a natural language processing (NLP) technique used to extract patterns and insights from article text, revealing popular topics, keywords, and trends from a collection of documents.</p>
+    <p>In this project, I explored bigrams, trigrams, and LDA topic modelling to uncover topics and article types that tend to generate higher engagements</p>
     <div class="home-p-container">
     </div>
 
@@ -42,7 +47,7 @@
         </div>
         <!-- SECTION 1.2 TREEMAP - bigram - above avg engagement articles-->
         <div class="chart-container">
-            <h3>Above Average Engagement</h3>
+            <h3>Most Engaging Articles</h3>
             <button id="all-bi-treemap">All Articles</button>
             <button id="tds-bi-treemap">Towards Data Science</button>
             <button id="luc-bi-treemap">Level Up Coding</button>
@@ -69,7 +74,7 @@
     </div>
     <!-- SECTION 2.2 TREEMAP - Trigram - above avg engagement articles -->
     <div class="chart-container">
-        <h3>Above Average Engagement</h3>
+        <h3>Most Engaging Articles</h3>
         <button id="all-tri-treemap">All Articles</button>
         <button id="tds-tri-treemap">Towards Data Science</button>
         <button id="luc-tri-treemap">Level Up Coding</button>
@@ -96,7 +101,7 @@
     </div>
 
     <!-- SECTION 4 ABOVE AVERAGE LDA -->
-     <h2>LDA for better performing articles</h2>
+     <h2>LDA for Most Engaging Articles</h2>
     <div class="container" id="above-avg-lda-container">
         <div class="chart-container">
         <button id="all-abv-lda">All Articles</button>
@@ -114,5 +119,8 @@
         console.log("STATIC_VERSION:", "{{ STATIC_VERSION }}");
     </script>
     
+    <footer>
+        <p>&copy; Joan Kusuma</p>
+    </footer>
 </body>
 </html>

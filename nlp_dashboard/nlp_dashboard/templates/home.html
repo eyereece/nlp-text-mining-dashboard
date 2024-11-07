@@ -21,6 +21,9 @@
             <li class="nav-item">
                 <a class ="nav-link" href="{% url 'text-mining' %}">Text Mining</a>
             </li>
+            <li class="nav-item">
+                <a class ="nav-link" href="{% url 'walkthrough' %}">Walkthrough</a>
+            </li>
         </ul>
         </div>
     </div>
@@ -28,7 +31,9 @@
     <!-- SECTION 1 HEADER TEXT -->
     <h1>Exploratory Data Analysis</h1>
     <div class="home-p-container">
-        <p>I will start by exploring dataset before showing analysis of the text data</p>
+        <p>This project is a dynamic, interactive dashboard that provides insights into software engineering and data science articles.</p>
+        <p>Designed to explore trends and reader interests in these fields, the dashboard presents exploratory data analysis and text-mining visualizations.</p>
+        <p>Users can uncover patterns, popular topics, and article types that resonate most with audiences, making it a valuable tool for understanding content trends in tech and data science.</p>
     </div>
 
     <!-- SECTION 2 LINE CHART releases and claps over time -->
@@ -83,5 +88,8 @@
         console.log("STATIC_VERSION:", "{{ STATIC_VERSION }}");
     </script>
     
+    <footer>
+        <p>&copy; Joan Kusuma</p>
+    </footer>
 </body>
 </html>
