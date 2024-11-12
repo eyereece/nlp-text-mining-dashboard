@@ -39,14 +39,97 @@
     </p>
     <p>
         In this walkthrough, I cover what each visualization is trying to communicate and 
-        how it could help technical writers understand the tech landscape and trends better.
+        how it could help technical writers understand the tech landscape and trends better. 
+        The examples I used in this walkthrough utilize static images for better explanation. 
+        To use the dynamic dashboard and get the latest results, go back to the dashboard or text mining page.
     </p>
-
+    <br/>
+    <h2>Exploratory Data Analysis (EDA)</h2>
+    <div class="container">
+        <div class="chart-container">
+            <h3>EDA Screenshot from Dashboard</h3>
+            <img src="{% static 'images/eda-ss.png' %}" alt="EDA" style="width: 750px; height: auto;">
+        </div>
+        <div class="text-container">
+            <p>
+                The purpose of an EDA here is to uncover patterns and trends, 
+                providing insights into article performance, audience engagement, and forming initial hypotheses 
+                while laying the groundwork for deeper analysis.
+            </p>
+            <p>
+                <b>Articles published vs claps received over time: </b>
+                Check how articles perform over time, can be filtered by publisher, 
+                for example, let's say a publisher published a lot of articles but 
+                received very little engagement during the same time period, that may 
+                indicate that the publisher tend to either offer lower quality content or 
+                readers that are less engaged.
+            </p>
+            <p>
+                <b>Average articles published vs claps by day of week: </b>
+                With this, you can compare the days publishers are most active and 
+                when their articles are performing better, for example, if Publisher A 
+                tend to publish the most on Tuesday but engagement is highest for articles 
+                published on Friday, this may mean that readers tend to be more active on the weekend.
+            </p>
+            <p>
+                <b>Claps distribution: </b>
+                We can also look at the claps distribution for each publisher to see where the median 
+                engagement numbers are, are there a lot of outliers? or mostly evenly distributed?
+            </p>
+            <p>
+                <b>Number of articles released: </b>
+                If you compare the numbers here with the claps distribution above and see that a lot of 
+                articles are published but their claps distribution is on the lower end, this could indicate 
+                lower quality content are being accepted and published, or maybe people are not interested 
+                in the topics they are covering.
+            </p>
+            <p>
+                <b>Number of unique authors per publisher: </b>
+                Higher number of unique authors may indicate more diverse point of view, if we again compare this 
+                to other data point, such as, claps distribution, does higher number of unique authors indicate 
+                higher engagement?
+            </p>
+        </div>
+    </div>
+    <br/>
+    <h2>N-Gram Guide</h2>
+    <div class="container">
+        <div class="chart-container">
+            <h3>Bigram for all articles</h3>
+            <img src="{% static 'images/bigram-tds.png' %}" alt="bigram all articles" style="width: 750px; height: auto;">
+        </div>
+        <div class="chart-container">
+            <h3>Bigram for articles with higher engagement</h3>
+            <img src="{% static 'images/bigram-tds-tm.png' %}" alt="bigram for articles with higher engagement" style="width: 750px; height: auto;">
+        </div>
+    </div>
+    <div class="container">
+        <div class="text-container">
+            <h3>Comments</h3>
+            <p>In this section, I will provide quick walkthrough for n-gram using examples. 
+                The two screenshots above shows the bigram (two words) results, 
+                the left shows a table for the publisher 'Towards Data Science', 
+                while the right screenshot shows a treemap for the same publisher 
+                filtered with higher engagement result.
+            </p>
+            <p>
+                If you compare the result from the table vs the treemap, you will see that there 
+                are similarities, but notice how some keywords in the table are not shown in the treemap 
+                and vice versa. The keywords in the table represents the trend among writers, while the 
+                keywords in the treemap represents the trend among audience. In this example, the treemap 
+                shows keywords such as "ai agents", "intuitively exhaustively", and "exhaustively explained", 
+                which is not shown in the table. This indicates that readers are interested in the topic for "ai agents" 
+                and maybe prefer articles that are "exhaustively explained" or more in-depth, writers knowledgeable about 
+                the topic may want to write more in-depth article about this topic.
+            </p>
+        </div>
+    </div>
+    <br/>
     <h2>LDA Topic Modelling Guide</h2>
     <div class="container">
         <div class="chart-container">
             <h3>LDA for all articles</h3>
-            <img src="{% static 'images/lda-all.png' %}" alt="LDA Above Average" style="width: 750px; height: auto;">
+            <img src="{% static 'images/lda-all.png' %}" alt="LDA" style="width: 750px; height: auto;">
         </div>
         <div class="chart-container">
             <h3>LDA for articles with higher engagement</h3>
