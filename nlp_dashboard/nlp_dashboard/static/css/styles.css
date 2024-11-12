@@ -194,11 +194,11 @@ tr:hover {
     margin-right: auto; /* Allows it to align to the left */
 }
 
-text-container {
+.text-container {
     text-align: left;
     flex: 1;
     min-width: 300px;
-    margin: 10px auto;
+    margin: 10px;
     position: relative;
     border-radius: 5px;
     padding: 20px;
@@ -211,4 +211,8 @@ text-container {
         rgba(30, 144, 255, 0.05),
         rgba(30, 144, 255, 0)
     );
+}
+
+.text-container h3 {
+    text-align: center;
 }

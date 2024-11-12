@@ -461,11 +461,13 @@ def get_above_avg_trigram(request, publisher=None):
     else:
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
+
 # helper function to process text
 def preprocess_text(text):
     # Tokenize the text, remove non-alphabetic characters, stop words, and lowercase them
     tokens = re.findall(r"\b\w+\b", text.lower())
     return [word for word in tokens if word not in stop_words]
+
 
 # lda
 def get_lda(request, publisher=None):
@@ -561,6 +563,7 @@ def text_mining(request):
             "above_avg_lda_url": above_avg_lda_url,
         },
     )
+
 
 def walkthrough(request):
     return render(request, "walkthrough.html")

@@ -76,5 +76,9 @@ urlpatterns = [
     path("lda/<str:publisher>/", get_lda, name="lda-publisher"),
     # above average LDA
     path("above-avg-lda/", get_above_avg_lda, name="above-avg-lda"),
-    path("above-avg-lda/<str:publisher>/", get_above_avg_lda, name="above-avg-lda-publisher"),
+    path(
+        "above-avg-lda/<str:publisher>/",
+        get_above_avg_lda,
+        name="above-avg-lda-publisher",
+    ),
 ]

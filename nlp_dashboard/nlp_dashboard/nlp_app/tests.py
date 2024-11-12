@@ -415,22 +415,24 @@ class TrigramTest(TestCase):
 
 # ABOVE AVERAGE TRIGRAM
 class AboveAvgTrigramTest(TestCase):
-    @patch('nlp_app.views.get_articles_data')
+    @patch("nlp_app.views.get_articles_data")
     def test_get_trigram(self, mock_get_articles_data):
-        mock_data = pd.DataFrame([
-            {"title_cleaned": "Data science is great", "claps": 15},
-            {"title_cleaned": "Data science is fun", "claps": 10},
-            {"title_cleaned": "Machine learning in data science", "claps": 25},
-            {"title_cleaned": "Deep learning for data", "claps": 20},
-            {"title_cleaned": "Machine learning and AI", "claps": 5},
-        ])
+        mock_data = pd.DataFrame(
+            [
+                {"title_cleaned": "Data science is great", "claps": 15},
+                {"title_cleaned": "Data science is fun", "claps": 10},
+                {"title_cleaned": "Machine learning in data science", "claps": 25},
+                {"title_cleaned": "Deep learning for data", "claps": 20},
+                {"title_cleaned": "Machine learning and AI", "claps": 5},
+            ]
+        )
         mock_get_articles_data.return_value = mock_data
 
         # Simulate a GET request
-        response = self.client.get(reverse('above-avg-trigram'))
+        response = self.client.get(reverse("above-avg-trigram"))
 
         # Decode the response content
-        json_data = response.content.decode('utf-8')
+        json_data = response.content.decode("utf-8")
 
         # Assertions
         self.assertEqual(response.status_code, 200)
@@ -452,17 +454,26 @@ class AboveAvgTrigramTest(TestCase):
             self.assertIsInstance(item["keywords"], str)
             self.assertIsInstance(item["frequencies"], int)
 
+
 # LDA
+
 
 class LDATestCase(TestCase):
     @patch("nlp_app.views.pyLDAvis.prepared_data_to_html")
     @patch("nlp_app.views.get_articles_data")
-    def test_get_lda_with_publisher(self, mock_get_articles_data, mock_prepared_data_to_html):
+    def test_get_lda_with_publisher(
+        self, mock_get_articles_data, mock_prepared_data_to_html
+    ):
         # Mock the DataFrame returned by get_articles_data
-        mock_get_articles_data.return_value = pd.DataFrame({
-            "title_cleaned": ["This is a test article", "Another test article"],
-            "tokens": [["this", "is", "test", "article"], ["another", "test", "article"]]
-        })
+        mock_get_articles_data.return_value = pd.DataFrame(
+            {
+                "title_cleaned": ["This is a test article", "Another test article"],
+                "tokens": [
+                    ["this", "is", "test", "article"],
+                    ["another", "test", "article"],
+                ],
+            }
+        )
 
         # Mock the HTML output from pyLDAvis
         mock_prepared_data_to_html.return_value = "<html>LDA Visualization</html>"
@@ -472,16 +483,25 @@ class LDATestCase(TestCase):
 
         # Assertions
         self.assertEqual(response.status_code, 200)
-        self.assertIn("<html>LDA Visualization</html>", response.content.decode("utf-8"))
+        self.assertIn(
+            "<html>LDA Visualization</html>", response.content.decode("utf-8")
+        )
 
     @patch("nlp_app.views.pyLDAvis.prepared_data_to_html")
     @patch("nlp_app.views.get_articles_data")
-    def test_get_lda_without_publisher(self, mock_get_articles_data, mock_prepared_data_to_html):
+    def test_get_lda_without_publisher(
+        self, mock_get_articles_data, mock_prepared_data_to_html
+    ):
         # Mock the DataFrame returned by get_articles_data for all articles
-        mock_get_articles_data.return_value = pd.DataFrame({
-            "title_cleaned": ["This is a test article", "Another test article"],
-            "tokens": [["this", "is", "test", "article"], ["another", "test", "article"]]
-        })
+        mock_get_articles_data.return_value = pd.DataFrame(
+            {
+                "title_cleaned": ["This is a test article", "Another test article"],
+                "tokens": [
+                    ["this", "is", "test", "article"],
+                    ["another", "test", "article"],
+                ],
+            }
+        )
 
         # Mock the HTML output from pyLDAvis
         mock_prepared_data_to_html.return_value = "<html>LDA Visualization</html>"
@@ -491,7 +511,9 @@ class LDATestCase(TestCase):
 
         # Assertions
         self.assertEqual(response.status_code, 200)
-        self.assertIn("<html>LDA Visualization</html>", response.content.decode("utf-8"))
+        self.assertIn(
+            "<html>LDA Visualization</html>", response.content.decode("utf-8")
+        )
 
     def test_get_lda_method_not_allowed(self):
         # Test with a non-GET request to ensure it returns a 405 error
@@ -507,13 +529,20 @@ class LDATestCase(TestCase):
 class AboveAvgLDATestCase(TestCase):
     @patch("nlp_app.views.pyLDAvis.prepared_data_to_html")
     @patch("nlp_app.views.get_articles_data")
-    def test_get_above_avg_lda_w_publisher(self, mock_get_articles_data, mock_prepared_data_to_html):
+    def test_get_above_avg_lda_w_publisher(
+        self, mock_get_articles_data, mock_prepared_data_to_html
+    ):
         # Mock the df returned by get_articles_data
-        mock_get_articles_data.return_value = pd.DataFrame({
-            "title_cleaned": ["This is a test article", "Another test article"],
-            "tokens": [["this", "is", "test", "article"], ["another", "test", "article"]],
-            "claps": [5, 10]
-        })
+        mock_get_articles_data.return_value = pd.DataFrame(
+            {
+                "title_cleaned": ["This is a test article", "Another test article"],
+                "tokens": [
+                    ["this", "is", "test", "article"],
+                    ["another", "test", "article"],
+                ],
+                "claps": [5, 10],
+            }
+        )
 
         # Mock the HTML output from pyLDAvis
         mock_prepared_data_to_html.return_value = "<html>LDA Visualization</html>"
@@ -523,17 +552,26 @@ class AboveAvgLDATestCase(TestCase):
 
         # Assertions
         self.assertEqual(response.status_code, 200)
-        self.assertIn("<html>LDA Visualization</html>", response.content.decode("utf-8"))
+        self.assertIn(
+            "<html>LDA Visualization</html>", response.content.decode("utf-8")
+        )
 
     @patch("nlp_app.views.pyLDAvis.prepared_data_to_html")
     @patch("nlp_app.views.get_articles_data")
-    def test_get_above_avg_lda_without_publisher(self, mock_get_articles_data, mock_prepared_data_to_html):
+    def test_get_above_avg_lda_without_publisher(
+        self, mock_get_articles_data, mock_prepared_data_to_html
+    ):
         # Mock the df returned by get_articles_data for all articles
-        mock_get_articles_data.return_value = pd.DataFrame({
-            "title_cleaned": ["This is a test article", "Another test article"],
-            "tokens": [["this", "is", "test", "article"], ["another", "test", "article"]],
-            "claps": [5, 10]
-        })
+        mock_get_articles_data.return_value = pd.DataFrame(
+            {
+                "title_cleaned": ["This is a test article", "Another test article"],
+                "tokens": [
+                    ["this", "is", "test", "article"],
+                    ["another", "test", "article"],
+                ],
+                "claps": [5, 10],
+            }
+        )
 
         # Mock the HTML output from pyLDAvis
         mock_prepared_data_to_html.return_value = "<html>LDA Visualization</html>"
@@ -543,7 +581,9 @@ class AboveAvgLDATestCase(TestCase):
 
         # Assertions
         self.assertEqual(response.status_code, 200)
-        self.assertIn("<html>LDA Visualization</html>", response.content.decode("utf-8"))
+        self.assertIn(
+            "<html>LDA Visualization</html>", response.content.decode("utf-8")
+        )
 
     def test_get_above_avg_lda_not_allowed(self):
         # Test with a non-GET request

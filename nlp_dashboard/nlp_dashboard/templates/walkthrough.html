@@ -6,8 +6,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@3.0.0/dist/chartjs-chart-treemap.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v={{ STATIC_VERSION }}">
-    <!-- <link rel="stylesheet" href="{% static 'css/styles.css' %}"> -->
+    <!-- <link rel="stylesheet" href="{% static 'css/styles.css' %}?v={{ STATIC_VERSION }}"> -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     <div class="toolbar">
@@ -27,7 +27,20 @@
     </div>
 
     <h1>Walkthrough</h1>
-    <p>xxx</p>
+    <p>The purpose of this dashboard project is to uncover patterns, 
+        popular topics, and article types that resonate most with technical audiences.
+    </p>
+    <p>
+        This is especially useful for technical writers, for example, let's say 
+        you have a topic in mind that you want to write about, you probably have a few questions 
+        in mind, such as, "Is this topic already widely covered?", "Are audiences more into 
+        project based tutorial or do they want more educational content on this topic?", 
+        "I know a lot about Topic A, what are some subtopics in Topic A that hasn't been covered yet?"
+    </p>
+    <p>
+        In this walkthrough, I cover what each visualization is trying to communicate and 
+        how it could help technical writers understand the tech landscape and trends better.
+    </p>
 
     <h2>LDA Topic Modelling Guide</h2>
     <div class="container">
@@ -40,15 +53,32 @@
             <img src="{% static 'images/lda-abv-avg.png' %}" alt="LDA Above Average" style="width: 750px; height: auto;">
         </div>
     </div>
-    <div class="text-container">
-        <h3>Comments</h3>
-        <p>Take a look at the charts on the left above for LDA for all articles vs the one on the left for above average articles.</p>
-        <p>The bubble chart on the left side of each image represents the top 5 identified topics from each image, when you click on any one, will show the most relevant terms for each topic</p>
-        <p>Let's compare the top terms for topic 1 from each image, the image on the left for topic and terms of all articles, and the image on the left for articles with higher engagement</p>
-        <p>Let's start with topic 1 for all articles, terms are mostly focused on programming skills and software engineering concepts, with more educational focus such as "guide", "tips" and emphasis on general knowledge such as "essential", "explained", and "interview"</p>
-        <p>Now, take a look at topic 1 for articles with higher engagement, some similarities do occur, but the emphasis is more on specific topics, for example, "ai", "llms", "machine", "learning", and "rag". The topic also has fewer terms related to general education or instructional content compared to the previous topic, for example, "advanced", "system", "design".</p>
-        <p>The topic for all articles represents articles that are most often written, and the topic for higher engagement articles represents article that readers tend to engage more with.</p>
-        <p>Clicking on the publisher button would show the result for each publisher and more focused results.</p>
+    <div class="container">
+        <div class="text-container">
+            <h3>Comments</h3>
+            <p>Take a look at the charts on the left above for LDA 
+                for all articles vs the one on the right for articles with higher engagement. 
+                The bubble chart on the left side of each image represents the top 5 
+                identified topics from each image. When you click on any topic, 
+                it will show the most relevant terms for each topic.
+            </p>
+
+            <p>Let's compare the top terms for topic 1 from each image, 
+                the image on the left will show topic and terms for all articles, 
+                and the image on the right will show topics and terms for articles with higher engagement
+                Let's start with topic 1 for all articles, terms are 
+                mostly focused on programming skills and software engineering concepts,
+                with more educational focus such as "guide", "tips" and emphasis on 
+                general knowledge such as "essential", "explained", and "interview". 
+                Now, take a look at topic 1 for articles with higher engagement, 
+                some similarities do occur, but the emphasis is more on specific topics, 
+                for example, "ai", "llms", "machine", "learning", and "rag". 
+                The topic also has fewer terms related to general education or instructional content compared to the previous topic, 
+                for example, "advanced", "system", "design".</p>
+            <p>The topic for all articles represents articles that are most often written, 
+                and the topic for higher engagement articles represents article that readers tend to engage more with.  
+                Clicking on the publisher button would show the result for each publisher and more focused results.</p>
+        </div>
     </div>
     <!--Image-->
 
