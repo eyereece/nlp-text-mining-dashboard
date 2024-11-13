@@ -17,6 +17,9 @@ COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 RUN apt-get update && apt-get install -y postgresql-client
 
+# Download NLTK stopwords
+RUN python -m nltk.downloader stopwords
+
 # copy entrypoint.sh
 COPY ./entrypoint.sh .
 RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.sh

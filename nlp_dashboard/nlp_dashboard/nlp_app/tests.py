@@ -215,7 +215,7 @@ class PublisherCountTest(TestCase):
         response = self.client.get(reverse("publisher-count"))
 
         # Decode the response content
-        json_data = response.content.decode("utf-8")
+        # json_data = response.content.decode("utf-8")
 
         # Assertions
         self.assertEqual(response.status_code, 200)
@@ -259,7 +259,7 @@ class NuniqueAuthorsTest(TestCase):
         response = self.client.get(reverse("publisher-count"))
 
         # Decode the response content
-        json_data = response.content.decode("utf-8")
+        # json_data = response.content.decode("utf-8")
 
         # Assertions
         self.assertEqual(response.status_code, 200)
@@ -306,7 +306,7 @@ class BigramTest(TestCase):
         response = self.client.get(reverse("bigram"))
 
         # Decode the response content
-        json_data = response.content.decode("utf-8")
+        # json_data = response.content.decode("utf-8")
 
         # Assertions
         self.assertEqual(response.status_code, 200)
@@ -348,7 +348,7 @@ class AboveAvgBigramTest(TestCase):
         response = self.client.get(reverse("above-avg-bigram"))
 
         # Decode the response content
-        json_data = response.content.decode("utf-8")
+        # json_data = response.content.decode("utf-8")
 
         # Assertions
         self.assertEqual(response.status_code, 200)
@@ -390,7 +390,7 @@ class TrigramTest(TestCase):
         response = self.client.get(reverse("trigram"))
 
         # Decode the response content
-        json_data = response.content.decode("utf-8")
+        # json_data = response.content.decode("utf-8")
 
         # Assertions
         self.assertEqual(response.status_code, 200)
@@ -432,7 +432,7 @@ class AboveAvgTrigramTest(TestCase):
         response = self.client.get(reverse("above-avg-trigram"))
 
         # Decode the response content
-        json_data = response.content.decode("utf-8")
+        # json_data = response.content.decode("utf-8")
 
         # Assertions
         self.assertEqual(response.status_code, 200)
