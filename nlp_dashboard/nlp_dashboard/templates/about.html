@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tea.io - NLP Text Mining Dashboard</title>
+    {% load static %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@3.0.0/dist/chartjs-chart-treemap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v={{ STATIC_VERSION }}">
+    <!-- <link rel="stylesheet" href="{% static 'css/styles.css' %}"> -->
+</head>
+<body>
+    <div class="toolbar">
+        <div class="toolbar__center">
+        <ul class="nav nav-pills nav-justified">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'home' %}">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class ="nav-link" href="{% url 'text-mining' %}">Text Mining</a>
+            </li>
+            <li class="nav-item">
+                <a class ="nav-link" href="{% url 'walkthrough' %}">Walkthrough</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="{% url 'about' %}">About</a>
+            </li>
+        </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="chart-container">
+            <h3>Software Architecture</h3>
+            <img src="{% static 'images/nlp-dashboard-architecture-diagram.png' %}" alt="django-docker-software-architecture" style="width: 750px; height: auto;">
+        </div>
+        <div class="text-container">
+            <br/>
+            <br/>
+            <p>This open-source project is created for educational purpose only. </p>
+            <p>
+                Code and implementation details can be found on my 
+                <a href="https://github.com/eyereece/nlp-text-mining-dashboard">Github</a>
+            </p>
+            <p>
+                <b>Tech Stack: </b>
+            </p>
+            <ul class="tech-stack">
+                <li>Frontend: HTML, CSS, JavaScript</li>
+                <li>Backend: Python, Django</li>
+                <li>Database: PostgreSQL</li>
+                <li>Orchestration and Messaging: Airflow, RabbitMQ</li>
+                <li>Production Environment: Gunicorn, Nginx, Docker</li>
+                <li>CI/CD and Version Control: Git, GitHub</li>
+                <li>Cloud: AWS</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; Joan Kusuma</p>
+    </footer>
+</body>
+</html>

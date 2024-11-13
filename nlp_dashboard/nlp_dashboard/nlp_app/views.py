@@ -567,3 +567,6 @@ def text_mining(request):
 
 def walkthrough(request):
     return render(request, "walkthrough.html")
+
+def about(request):
+    return render(request, "about.html")

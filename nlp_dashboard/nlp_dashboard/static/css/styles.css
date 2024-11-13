@@ -10,13 +10,13 @@ body {
 }
 
 .toolbar {
-    position: fixed; /* Makes the toolbar stay in place */
-    top: 0; /* Aligns it to the top of the viewport */
-    left: 0; /* Aligns it to the left of the viewport */
-    width: 100%; /* Stretches the toolbar across the full width */
-    z-index: 1000; /* Keeps it above other content */
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    z-index: 1000; 
     background-color: #000515; 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Adds shadow for better visibility */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
 }
 
 ul {
@@ -28,6 +28,19 @@ ul {
     display: flex;
     justify-content: center;
 }
+
+.tech-stack {
+    color: #acacac;
+    list-style-type: disc;
+    margin: 10px 0;
+    padding-left: 20px;
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    /* font-size: 0.75rem;
+    font-weight: 450;
+    line-height: 1.5; */
+}
+
   
 li {
     margin: 0 10px;
@@ -83,7 +96,7 @@ p {
 }
 
 .home-p-container {
-    padding: 0 40px; /* Adds padding to the left and right */
+    padding: 0 40px;
 }
 
 .container {
@@ -188,10 +201,10 @@ tr:hover {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-align: left !important; /* Force left alignment */
-    display: inline-block; /* Keeps the width to the content */
-    margin-left: 0 !important; /* Removes any left margin */
-    margin-right: auto; /* Allows it to align to the left */
+    text-align: left !important; 
+    display: inline-block; 
+    margin-left: 0 !important; 
+    margin-right: auto; 
 }
 
 .text-container {

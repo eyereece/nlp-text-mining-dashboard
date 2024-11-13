@@ -3,6 +3,7 @@ from .views import (
     home,
     text_mining,
     walkthrough,
+    about,
     get_releases_claps_by_week,
     get_releases_claps_by_day,
     get_claps_distribution,
@@ -21,6 +22,7 @@ urlpatterns = [
     path("", home, name="home"),
     path("text-mining/", text_mining, name="text-mining"),
     path("walkthrough/", walkthrough, name="walkthrough"),
+    path("about/", about, name="about"),
     # APIs - home
     # line chart
     path(
