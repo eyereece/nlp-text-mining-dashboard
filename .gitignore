@@ -1,3 +1,6 @@
+# OS Files
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -123,6 +126,10 @@ celerybeat.pid
 
 # Environments
 .env
+.env.prod
+.env.prod.proxy-companion
+.env.staging
+.env.staging.proxy-companion
 .venv
 env/
 venv/

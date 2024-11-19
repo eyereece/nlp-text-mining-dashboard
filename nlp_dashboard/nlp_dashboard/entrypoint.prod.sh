@@ -12,5 +12,11 @@ then
     echo "PostgreSQL started"
 fi
 
+# Apply migrations without flushing the database
+python manage.py migrate --noinput
+
+# Collect Static files
+python manage.py collectstatic --noinput
+
 # Execute the command passed as arguments
 exec "$@"
