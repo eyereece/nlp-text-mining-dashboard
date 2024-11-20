@@ -1,16 +1,13 @@
 <h2 align="center">NLP Text Mining Dashboard Web app</h2>
 <br>
 
+Live demo: https://teas.cafe
+
 <b>For full implementation and report, please refer to the file: report.pdf</b>
 
 <p>Teas.cafe is a dynamic, interactive, nlp dashboard that provides insights into software engineering and data science articles. 
 Designed to explore trends and reader interests in these fields, the dashboard presents exploratory data analysis and text mining visualizations. 
 Users can uncover patterns, popular topics, and article types that resonate most with audiences, making it a valuable tool for understanding content trends in tech and data science.</p>
-
-# Project Demo
-Live demo: https://teas.cafe
-<br/>
-<br/>
 
 # Architecture    
 <img src="img/nlp-dashboard-architecture-diagram.png" width="1000"/>
@@ -38,6 +35,19 @@ Live demo: https://teas.cafe
         * AWS EC2 running web app in Docker container
         * AWS ECR where the Docker images are stored
         * AWS RDS PostgreSQL running the PostgreSQL database
+<br/>
+<br/>
+
+# Project Demo
+
+#### Dashboard Homepage
+<img src="img/dashboard-homepage.png" width="1000"/>
+
+#### Text Mining Page
+<img src="img/text-mining.png" width="1000"/>
+
+#### LDA Analysis
+<img src="img/lda-analysis.png" width="1000"/>
 <br/>
 <br/>
 
