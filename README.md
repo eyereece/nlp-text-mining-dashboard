@@ -1,7 +1,7 @@
 <h2 align="center">NLP Text Mining Dashboard Web app</h2>
 <br>
 
-<b>For full implementation and report, please refer to the file: <u>report.pdf</u></b>
+<b>For full implementation and report, please refer to the file: report.pdf</b>
 
 <p>Teas.cafe is a dynamic, interactive, nlp dashboard that provides insights into software engineering and data science articles. 
 Designed to explore trends and reader interests in these fields, the dashboard presents exploratory data analysis and text mining visualizations. 
