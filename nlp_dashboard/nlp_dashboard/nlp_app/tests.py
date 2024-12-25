@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.http import JsonResponse
 from unittest.mock import patch, MagicMock
+from datetime import datetime, timedelta
 
 import unittest
 import json
@@ -30,10 +31,11 @@ from nlp_app.views import (
 class GetArticlesDataCacheTest(TestCase):
 
     def setUp(self):
-        cached_articles_data.clear()  # Clear cache before each test
+        cached_articles_data.clear()
 
     @patch("nlp_app.views.Articles.objects")  # Mock the query
-    def test_cache_miss_and_hit(self, mock_articles):
+    @patch("nlp_app.views.datetime")
+    def test_cache_miss_and_hit(self, mock_datetime, mock_articles):
         # Mock the queryset to return a fixed list
         mock_articles.all.return_value.values.return_value = [
             {
@@ -56,12 +58,22 @@ class GetArticlesDataCacheTest(TestCase):
             }
         ]
 
+        # Mock datetime to simulate the current time
+        mock_datetime.now.return_value = datetime(2024, 1, 1, 12, 0)
+
         # Call with publisher=None, cache should miss
         get_articles_data()  # should miss
         self.assertIn("all", cached_articles_data)  # Cache should now contain 'all'
 
         # Call again with publisher=None, cache should hit
         get_articles_data()  # should hit
+        self.assertIn("all", cached_articles_data)  # Cache should still contain 'all'
+
+        # Change time to simulate cache expiry
+        mock_datetime.now.return_value = datetime(2024, 1, 2, 12, 0)
+
+        # After 1 day, the cache should expire and be refreshed
+        get_articles_data()  # Cache should refresh
         self.assertIn("all", cached_articles_data)  # Cache should still contain 'all'
 
     def tearDown(self):

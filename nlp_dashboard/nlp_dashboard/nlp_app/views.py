@@ -8,6 +8,9 @@ from collections import Counter
 from nltk.corpus import stopwords
 from gensim import corpora
 from gensim.models import LdaModel
+from datetime import datetime, timedelta
+
+
 import pyLDAvis
 import pyLDAvis.gensim_models as gensimvis
 import re
@@ -18,57 +21,71 @@ stop_words = set(stopwords.words("english"))
 
 # cache articles data
 cached_articles_data = {}
+cache_timestamps = {}
+CACHE_EXPIRY_TIME = 86400
 
 
 def get_articles_data(publisher=None):
-    global cached_articles_data
+    global cached_articles_data, cache_timestamps
 
     # Check if the data for the specific publisher is already cached
     cache_key = publisher or "all"
 
-    # If the data is not cached, query the database
-    if cache_key not in cached_articles_data:
-        if publisher:
-            queryset = Articles.objects.filter(collection=publisher).values(
-                "author",
-                "title",
-                "collection",
-                "read_time",
-                "claps",
-                "responses",
-                "published_date",
-                "pub_year",
-                "pub_month",
-                "pub_date",
-                "pub_day",
-                "word_count",
-                "title_cleaned",
-                "week",
-                "log_claps",
-                "word_count_title",
-            )
-        else:
-            queryset = Articles.objects.all().values(
-                "author",
-                "title",
-                "collection",
-                "read_time",
-                "claps",
-                "responses",
-                "published_date",
-                "pub_year",
-                "pub_month",
-                "pub_date",
-                "pub_day",
-                "word_count",
-                "title_cleaned",
-                "week",
-                "log_claps",
-                "word_count_title",
-            )
+    # Check if the cache exists and is still valid
+    now = datetime.now()
+    if (
+        cache_key in cached_articles_data
+        and cache_key in cache_timestamps
+        and (now - cache_timestamps[cache_key]).total_seconds() < CACHE_EXPIRY_TIME
+    ):
+        print(f"Cache hit for {cache_key}")
+        return cached_articles_data[cache_key]
+    else:
+        print(f"Cache expired or not found for {cache_key}")
 
-        # Store the queried data in the cache for the specific publisher
-        cached_articles_data[cache_key] = pd.DataFrame(list(queryset))
+    # Query the database if cache is invalid or expired
+    if publisher:
+        queryset = Articles.objects.filter(collection=publisher).values(
+            "author",
+            "title",
+            "collection",
+            "read_time",
+            "claps",
+            "responses",
+            "published_date",
+            "pub_year",
+            "pub_month",
+            "pub_date",
+            "pub_day",
+            "word_count",
+            "title_cleaned",
+            "week",
+            "log_claps",
+            "word_count_title",
+        )
+    else:
+        queryset = Articles.objects.all().values(
+            "author",
+            "title",
+            "collection",
+            "read_time",
+            "claps",
+            "responses",
+            "published_date",
+            "pub_year",
+            "pub_month",
+            "pub_date",
+            "pub_day",
+            "word_count",
+            "title_cleaned",
+            "week",
+            "log_claps",
+            "word_count_title",
+        )
+
+    # Store the queried data in the cache for the specific publisher
+    cached_articles_data[cache_key] = pd.DataFrame(list(queryset))
+    cache_timestamps[cache_key] = now
     # Return the cached data for the given publisher
     return cached_articles_data[cache_key]
 

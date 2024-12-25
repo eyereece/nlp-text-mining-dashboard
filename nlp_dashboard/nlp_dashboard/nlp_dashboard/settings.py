@@ -84,12 +84,12 @@ WSGI_APPLICATION = "nlp_dashboard.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE"),
-        "NAME": os.getenv("SQL_DATABASE"),
-        "USER": os.getenv("SQL_USER"),
-        "PASSWORD": os.getenv("SQL_PASSWORD"),
-        "HOST": os.getenv("SQL_HOST"),
-        "PORT": os.getenv("SQL_PORT"),
+        "ENGINE": os.environ.get("DB_ENGINE"),
+        "NAME": os.getenv("DB_DATABASE"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
     }
 }
 
@@ -135,8 +135,8 @@ STATIC_VERSION = int(time.time())
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+# DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
+# CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(" ")
