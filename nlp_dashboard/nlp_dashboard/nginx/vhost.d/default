@@ -2,3 +2,43 @@ location /static/ {
   alias /home/app/web/staticfiles/;
   add_header Access-Control-Allow-Origin *;
 }
+
+location ~ ^/\.env.* {
+    deny all;
+    return 404;
+}
+
+location = /.env {
+    deny all;
+    return 404;
+}
+
+location = /.env.prod {
+    deny all;
+    return 404;
+}
+
+location = /.env.prod.proxy-companion {
+    deny all;
+    return 404;
+}
+
+location = /.env.staging {
+    deny all;
+    return 404;
+}
+
+location = /.env.staging.proxy-companion {
+    deny all;
+    return 404;
+}
+
+location ~* /.+\.py$ {
+    deny all;
+    return 404;
+}
+
+location ~* /.+\.pyc$ {
+    deny all;
+    return 404;
+}
