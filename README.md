@@ -1,11 +1,12 @@
 <h2 align="center">NLP Text Mining Dashboard Web app</h2>
 <br>
 
-Live demo: https://teas.cafe
+Live demo: https://vasilios.io
+
 
 <b>For full implementation and report, please refer to the file: report.pdf</b>
 
-<p>Teas.cafe is a dynamic, interactive, nlp dashboard that provides insights into software engineering and data science articles. 
+<p>Vasilios.io is a dynamic, interactive, nlp dashboard that provides insights into software engineering and data science articles. 
 Designed to explore trends and reader interests in these fields, the dashboard presents exploratory data analysis and text mining visualizations. 
 Users can uncover patterns, popular topics, and article types that resonate most with audiences, making it a valuable tool for understanding content trends in tech and data science.</p>
 
@@ -13,7 +14,7 @@ Users can uncover patterns, popular topics, and article types that resonate most
 <img src="img/nlp-dashboard-architecture-diagram.png" width="1000"/>
 
 <b>High-Level Architecture of the system:</b>
-* <b>Data Collection:</b>
+* <b>Data Collection:</b> (in separate repo, will publish soon)
     - An Airflow orchestrator is responsible for scheduling and running the tasks here
     - The first step is by scraping publicly available archive from the most popular tech publishers on Medium.com
     - The next step is to transform and clean the data to fit the schema in PostgreSQL
@@ -103,3 +104,5 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
 ```
+
+<i>Note: The live website was previously called teas.cafe</i>
