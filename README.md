@@ -1,7 +1,7 @@
 <h2 align="center">NLP Text Mining Dashboard Web app</h2>
 <br>
 
-Live demo: https://vasilios.io
+update 11/12: Live demo is no longer available. The project demo screenshots are still available below.
 
 
 <b>For full implementation and report, please refer to the file: report.pdf</b>
